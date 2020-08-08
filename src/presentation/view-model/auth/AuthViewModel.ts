@@ -14,6 +14,8 @@ export default interface AuthViewModel extends BaseViewModel {
 
   onSignIn(): Promise<void>;
 
+  onSignUp():Promise<void>;
+
   onSignOut(): void;
 
   onAuthStatusChanged(): void;

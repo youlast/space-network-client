@@ -24,12 +24,11 @@ export default class AuthRepositoryImpl implements AuthRepository {
     return !!localStorage.getItem(this.ACCESS_TOKEN_KEY);
   }
 
-  public signIn = (username: string, password: string,email:string): Promise<unknown> => {
+  public signIn = ( password: string,email:string): Promise<unknown> => {
     const requestOptions: RequestOptions = new RequestOptions();
 
     requestOptions.setBody(
       JSON.stringify({
-        username,
         password,
         email
       })
@@ -52,6 +51,23 @@ export default class AuthRepositoryImpl implements AuthRepository {
 
       return json;
     });
+  };
+
+  public signUp = (username:string,email:string,password:string,):unknown => {
+    const requestOptions: RequestOptions = new RequestOptions();
+
+    requestOptions.setBody(
+      JSON.stringify({
+        username,
+        password,
+        email
+      })
+    );
+
+    return ApiHelper.fetchPostJson(
+      `${APPLICATION_SERVER}/api/register`,
+      requestOptions
+    )
   };
 
   public signOut(): void {

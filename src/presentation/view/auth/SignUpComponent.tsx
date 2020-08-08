@@ -120,7 +120,7 @@ export default class SignUpComponent extends React.Component<Props, State>
           <div className="row mt-4">
             <button
               className="btn btn-primary btn-block"
-              onClick={(): Promise<void> => this.authViewModel.onSignIn()}
+              onClick={(): Promise<void> => this.authViewModel.onSignUp()}
               type="button"
             >
               Join to space-network

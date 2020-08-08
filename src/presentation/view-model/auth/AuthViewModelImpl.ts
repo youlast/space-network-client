@@ -73,12 +73,32 @@ export default class AuthViewModelImpl extends ViewModel
   };
 
   public onSignIn = async (): Promise<void> => {
-    if (this.validateLoginForm()) {
+    if (this.isValidSignInForm()) {
       try {
         await this.authRepository.signIn(
-          this.userNameQuery,
           this.passwordQuery,
           this.emailQuery
+        );
+      } catch (e) {
+        this.errorMessage = e.message;
+        this.isShowError = true;
+      }
+
+      super.notifyViewAboutChanges();
+    }
+
+    this.notifyViewAboutChanges();
+  };
+
+  public onSignUp = async (): Promise<void> => {
+    if (this.validateLoginForm()) {
+      try {
+        await this.authRepository.signUp(
+          this.userNameQuery,
+          this.emailQuery,
+          this.passwordQuery,
+
+
         );
       } catch (e) {
         this.errorMessage = e.message;
@@ -95,7 +115,34 @@ export default class AuthViewModelImpl extends ViewModel
     this.authRepository.signOut();
   };
 
+  private isValidSignInForm = ():boolean => {
+    if(!this.emailQuery){
+      this.isShowError = true;
+      this.errorMessage = "Email cannot be empty";
+      return false;
+    }
 
+    if(!this.passwordQuery) {
+      this.isShowError = false;
+      this.errorMessage = "Password cannot be empty";
+      return false;
+    }
+
+    if (this.errorMessage === "Email cannot be empty") {
+      this.isShowError = false;
+      this.errorMessage = "";
+      return false;
+    }
+
+    if (this.errorMessage === "Password cannot be empty") {
+      this.isShowError = false;
+      this.errorMessage = "";
+      return false;
+    }
+
+
+    return true
+  }
 
   private validateLoginForm = (): boolean => {
     if(!this.emailQuery){

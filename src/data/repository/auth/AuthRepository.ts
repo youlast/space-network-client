@@ -13,7 +13,9 @@ export default interface AuthRepository {
    * @throws {Error} if credentials are not valid
    * or another problem occured
    */
-  signIn(username: string, password: string,email:string): unknown;
+  signIn( password: string,email:string): unknown;
+
+  signUp(username:string,password:string,email:string):unknown;
 
   signOut(): void;
 }

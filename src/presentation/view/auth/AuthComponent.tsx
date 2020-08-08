@@ -74,19 +74,6 @@ export default class AuthComponent extends React.Component<Props, State>
 
           <div className="row mt-2">
             <input
-              type="text"
-              onChange={(e: React.FormEvent<HTMLInputElement>): void => {
-                this.authViewModel.onUserNameQueryChanged(
-                  e.currentTarget.value
-                );
-              }}
-              className="form-control"
-              placeholder="username"
-            />
-          </div>
-
-          <div className="row mt-2">
-            <input
               type="password"
               className="form-control"
               onChange={(e: React.FormEvent<HTMLInputElement>): void => {
