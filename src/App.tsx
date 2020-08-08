@@ -14,12 +14,13 @@ import {
 import AuthComponent from "./presentation/view/auth/AuthComponent";
 import BrowserHistoryHelper from "./util/BrowserHistoryHelper";
 import AuthListener from "./data/models/auth/AuthListener";
+import NavbarComponent from "./presentation/view/navbar/NavbarComponent";
 
 const App = () => {
   const authRepository: AuthRepository = new AuthRepositoryImpl();
   const authViewModel: AuthViewModel = new AuthViewModelImpl(authRepository);
 
-  const [isAuthorized, setAuthorized] = useState(authRepository.isAuthorized());
+  const [isAuthorized, setAuthorized] = useState(true);
   useEffect(() => {
     const authListener: AuthListener = {
       onAuthStatusChanged(): void {
@@ -37,12 +38,15 @@ const App = () => {
           "url(https://images.unsplash.com/photo-1417577097439-425fb7dec05e?ixlib=rb-1.2.1&auto=format&fit=crop&w=1489&q=80)",
         backgroundRepeat: "no-repeat",
         backgroundSize: 'cover',
+        paddingLeft:0,
+        paddingRight:0
       }}
     >
       <Router history={BrowserHistoryHelper.getHistory()}>
         <Switch>
           {isAuthorized ? (
             <>
+              <NavbarComponent/>
               <h1>You authorized</h1>
             </>
           ) : (
