@@ -1,0 +1,6 @@
+const {
+  APPLICATION_SERVER,
+  APPLICATION_VERSION,
+} = (window as any).globalConfig;
+
+export { APPLICATION_SERVER, APPLICATION_VERSION };
