@@ -53,7 +53,7 @@ export default class SignUpComponent extends React.Component<Props, State>
     const { isShowError, errorMessage } = this.state;
 
     return (
-      <div className="row flex-grow-1 d-flex justify-content-center align-items-center">
+      <div className="row flex-grow-1 d-flex justify-content-center align-items-center" style={{marginLeft:0,marginRight:0}}>
         <div className="auth-container col bg-white border rounded-lg shadow py-4 px-5">
           <div className="row mt-2 mb-5 justify-content-center">
             <h4>Space Network</h4>

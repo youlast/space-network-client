@@ -15,6 +15,7 @@ import AuthComponent from "./presentation/view/auth/AuthComponent";
 import BrowserHistoryHelper from "./util/BrowserHistoryHelper";
 import AuthListener from "./data/models/auth/AuthListener";
 import NavbarComponent from "./presentation/view/navbar/NavbarComponent";
+import BlogComponent from "./presentation/view/blog/BlogComponent";
 
 const App = () => {
   const authRepository: AuthRepository = new AuthRepositoryImpl();
@@ -46,16 +47,30 @@ const App = () => {
         <Switch>
           {isAuthorized ? (
             <>
-              <NavbarComponent/>
-              <h1>You authorized</h1>
-            </>
+              <Route path='/'>
+                <NavbarComponent/>
+
+              </Route>
+
+              <Route exact path="/sign_in">
+                <AuthComponent authViewModel={authViewModel} />
+              </Route>
+
+              <Route exact path="/sign_up">
+                <SignUpComponent authViewModel={authViewModel} />
+              </Route>
+
+              <Route exact path='/create_post'>
+                <BlogComponent/>
+              </Route>
+                </>
           ) : (
             <>
               <Route exact path="/">
                 <AuthComponent authViewModel={authViewModel} />
               </Route>
 
-              <Route exact path="/register">
+              <Route exact path="/sign_up">
                 <SignUpComponent authViewModel={authViewModel} />
               </Route>
             </>
