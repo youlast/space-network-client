@@ -15,11 +15,22 @@ import AuthComponent from "./presentation/view/auth/AuthComponent";
 import BrowserHistoryHelper from "./util/BrowserHistoryHelper";
 import AuthListener from "./data/models/auth/AuthListener";
 import NavbarComponent from "./presentation/view/navbar/NavbarComponent";
+import BlogCreatePost from "./presentation/view/blog/BlogCreatePost";
 import BlogComponent from "./presentation/view/blog/BlogComponent";
+import BlogRepository from "./data/repository/blog/BlogRepository";
+import BlogRepositoryImpl from "./data/repository/blog/BlogRepositoryImpl";
+import BlogViewModel from "./presentation/view-model/blog/BlogViewModel";
+import BlogViewModelImpl from "./presentation/view-model/blog/BlogViewModelImpl";
 
 const App = () => {
+  //repositories
   const authRepository: AuthRepository = new AuthRepositoryImpl();
+  const blogRepository:BlogRepository = new BlogRepositoryImpl()
+
+  //view-model
   const authViewModel: AuthViewModel = new AuthViewModelImpl(authRepository);
+  const blogViewModel:BlogViewModel = new BlogViewModelImpl(blogRepository)
+
 
   const [isAuthorized, setAuthorized] = useState(true);
   useEffect(() => {
@@ -49,6 +60,7 @@ const App = () => {
             <>
               <Route path='/'>
                 <NavbarComponent/>
+                <BlogComponent/>
 
               </Route>
 
@@ -61,7 +73,7 @@ const App = () => {
               </Route>
 
               <Route exact path='/create_post'>
-                <BlogComponent/>
+                <BlogCreatePost blogViewModel={blogViewModel}/>
               </Route>
                 </>
           ) : (
