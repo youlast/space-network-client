@@ -14,13 +14,17 @@ export default interface AuthViewModel extends BaseViewModel {
 
   onSignIn(): Promise<void>;
 
-  onSignUp():Promise<void>;
+  onSignUp(): Promise<void>;
 
   onSignOut(): void;
 
   onAuthStatusChanged(): void;
 
-  onEmailChanged(value:string):void;
+  onEmailChanged(value: string): void;
 
-  onConfirmPasswordChanged(value:string):void;
+  onConfirmPasswordChanged(value: string): void;
+
+  isAuthorized(): boolean;
+
+  getUserName(): string;
 }

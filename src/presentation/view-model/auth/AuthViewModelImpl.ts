@@ -13,8 +13,8 @@ export default class AuthViewModelImpl extends ViewModel
 
   public isShowError: boolean;
   public errorMessage: string;
-  public emailQuery:string;
-  public confirmPasswordQuery:string;
+  public emailQuery: string;
+  public confirmPasswordQuery: string;
 
   public authRepository: AuthRepository;
 
@@ -25,24 +25,18 @@ export default class AuthViewModelImpl extends ViewModel
 
     this.isShowError = false;
     this.errorMessage = "";
-    this.emailQuery = '';
-    this.confirmPasswordQuery = '';
+    this.emailQuery = "";
+    this.confirmPasswordQuery = "";
 
     this.authRepository = authRepository;
   }
 
-  /**
-   * @override
-   */
   public attachView = (baseView: BaseView): void => {
     super.attachView(baseView);
     this.authRepository.addAuthListener(this);
     this.moveHomeIfAuthorized();
   };
 
-  /**
-   * @override
-   */
   public detachView = (): void => {
     super.detachView();
     this.authRepository.removeAuthListener(this);
@@ -62,23 +56,21 @@ export default class AuthViewModelImpl extends ViewModel
     this.notifyViewAboutChanges();
   };
 
-  public onEmailChanged = (value:string):void => {
+  public onEmailChanged = (value: string): void => {
     this.emailQuery = value;
-    super.notifyViewAboutChanges()
+    super.notifyViewAboutChanges();
   };
 
-  public onConfirmPasswordChanged = (value:string):void => {
+  public onConfirmPasswordChanged = (value: string): void => {
     this.confirmPasswordQuery = value;
-    super.notifyViewAboutChanges()
+    super.notifyViewAboutChanges();
   };
 
   public onSignIn = async (): Promise<void> => {
     if (this.isValidSignInForm()) {
       try {
-        await this.authRepository.signIn(
-          this.passwordQuery,
-          this.emailQuery
-        );
+        //@ts-ignore
+        await this.authRepository.signIn(this.passwordQuery, this.emailQuery);
       } catch (e) {
         this.errorMessage = e.message;
         this.isShowError = true;
@@ -90,18 +82,28 @@ export default class AuthViewModelImpl extends ViewModel
     this.notifyViewAboutChanges();
   };
 
+  public isAuthorized = (): boolean => {
+    return this.authRepository.isAuthorized();
+  };
+
+  public getUserName = (): string => {
+    return this.authRepository.getUserName();
+  };
+
   public onSignUp = async (): Promise<void> => {
     if (this.validateLoginForm()) {
       try {
-        await this.authRepository.signUp(
-          this.userNameQuery,
-          this.emailQuery,
-          this.passwordQuery,
+        //@ts-ignore
+        await this.authRepository
+          .signUp(this.userNameQuery, this.emailQuery, this.passwordQuery)
 
-
-        );
+          .then((res: string) => {
+            if (res === "OK") {
+              BrowserHistoryHelper.moveTo("/sign_in");
+            }
+          });
       } catch (e) {
-        this.errorMessage = e.message;
+        this.errorMessage = e;
         this.isShowError = true;
       }
 
@@ -115,14 +117,14 @@ export default class AuthViewModelImpl extends ViewModel
     this.authRepository.signOut();
   };
 
-  private isValidSignInForm = ():boolean => {
-    if(!this.emailQuery){
+  private isValidSignInForm = (): boolean => {
+    if (!this.emailQuery) {
       this.isShowError = true;
       this.errorMessage = "Email cannot be empty";
       return false;
     }
 
-    if(!this.passwordQuery) {
+    if (!this.passwordQuery) {
       this.isShowError = false;
       this.errorMessage = "Password cannot be empty";
       return false;
@@ -140,18 +142,17 @@ export default class AuthViewModelImpl extends ViewModel
       return false;
     }
 
-
-    return true
-  }
+    return true;
+  };
 
   private validateLoginForm = (): boolean => {
-    if(!this.emailQuery){
+    if (!this.emailQuery) {
       this.isShowError = true;
       this.errorMessage = "Email cannot be empty";
       return false;
     }
 
-    if(!FormValidator.isValidEmail(this.emailQuery)) {
+    if (!FormValidator.isValidEmail(this.emailQuery)) {
       this.isShowError = true;
       this.errorMessage = "Wrong format of email address";
       return false;
@@ -169,19 +170,19 @@ export default class AuthViewModelImpl extends ViewModel
       return false;
     }
 
-    if(!this.passwordQuery) {
+    if (!this.passwordQuery) {
       this.isShowError = false;
       this.errorMessage = "Password cannot be empty";
       return false;
     }
 
-    if(!this.confirmPasswordQuery) {
+    if (!this.confirmPasswordQuery) {
       this.isShowError = false;
       this.errorMessage = "Confirm password cannot be empty";
       return false;
     }
 
-    if  (this.passwordQuery !== this.confirmPasswordQuery){
+    if (this.passwordQuery !== this.confirmPasswordQuery) {
       this.isShowError = true;
       this.errorMessage = "Password and confirm password doesn't match";
       return false;
@@ -222,8 +223,6 @@ export default class AuthViewModelImpl extends ViewModel
       this.errorMessage = "";
       return false;
     }
-
-
 
     return true;
   };

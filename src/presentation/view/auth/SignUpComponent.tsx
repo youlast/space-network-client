@@ -1,14 +1,13 @@
 import React from "react";
 
 import {
-  Link
+  Link,
   // @ts-ignore
 } from "react-router-dom";
 
 import "./auth-style.css";
 import BaseView from "../BaseView";
 import AuthViewModel from "../../view-model/auth/AuthViewModel";
-
 
 interface Props {
   authViewModel: AuthViewModel;
@@ -53,7 +52,10 @@ export default class SignUpComponent extends React.Component<Props, State>
     const { isShowError, errorMessage } = this.state;
 
     return (
-      <div className="row flex-grow-1 d-flex justify-content-center align-items-center" style={{marginLeft:0,marginRight:0}}>
+      <div
+        className="row flex-grow-1 d-flex justify-content-center align-items-center"
+        style={{ marginLeft: 0, marginRight: 0 }}
+      >
         <div className="auth-container col bg-white border rounded-lg shadow py-4 px-5">
           <div className="row mt-2 mb-5 justify-content-center">
             <h4>Space Network</h4>
@@ -63,9 +65,7 @@ export default class SignUpComponent extends React.Component<Props, State>
             <input
               type="text"
               onChange={(e: React.FormEvent<HTMLInputElement>): void => {
-                this.authViewModel.onEmailChanged(
-                  e.currentTarget.value
-                );
+                this.authViewModel.onEmailChanged(e.currentTarget.value);
               }}
               className="form-control"
               placeholder="email"
@@ -128,7 +128,7 @@ export default class SignUpComponent extends React.Component<Props, State>
           </div>
 
           <div className="row justify-content-center">
-            <Link className='pt-1' to='/'>
+            <Link className="pt-1" to="/sign_in">
               Already have a account?
             </Link>
           </div>

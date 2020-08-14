@@ -62,7 +62,7 @@ class BlogCreatePost extends React.Component<Props>{
             this.blogViewModel.setTextPost(e.currentTarget.value)} />
         </div>
         <div className='row justify-content-center pt-4'>
-          <button className='btn btn-dark' onClick={():Promise<void> => this.blogViewModel.onCreateNewPost() }>Post you post</button>
+          <button className='btn btn-dark' onClick={():Promise<void> => this.blogViewModel.onCreateNewPost()}>Post you post</button>
         </div>
 
       </div>

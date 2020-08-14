@@ -3,11 +3,13 @@ import AuthListener from "../../models/auth/AuthListener";
 import AuthRepository from "./AuthRepository";
 import ApiHelper from "../../api/ApiHelper";
 import { APPLICATION_SERVER } from "../../../constants";
+import BrowserHistoryHelper from "../../../util/BrowserHistoryHelper";
 
 export default class AuthRepositoryImpl implements AuthRepository {
   private authListeners: AuthListener[];
 
   private ACCESS_TOKEN_KEY = "access_token";
+  private USERNAME = "username";
 
   public constructor() {
     this.authListeners = [];
@@ -17,35 +19,45 @@ export default class AuthRepositoryImpl implements AuthRepository {
     if (!localStorage.getItem(this.ACCESS_TOKEN_KEY)) {
       throw new Error("Autorization token does not exitst");
     }
-    return localStorage.getItem(this.ACCESS_TOKEN_KEY) as string;
+    return `Bearer ${localStorage.getItem(this.ACCESS_TOKEN_KEY) as string}`;
+  }
+
+  public getUserName(): string {
+    return localStorage.getItem(this.USERNAME) as string;
   }
 
   public isAuthorized(): boolean {
     return !!localStorage.getItem(this.ACCESS_TOKEN_KEY);
   }
 
-  public signIn = ( password: string,email:string): Promise<unknown> => {
+  public signIn = (password: string, email: string): Promise<unknown> => {
     const requestOptions: RequestOptions = new RequestOptions();
 
     requestOptions.setBody(
       JSON.stringify({
         password,
-        email
+        email,
       })
     );
 
-
-
     return ApiHelper.fetchPostJson(
-      `${APPLICATION_SERVER}/api/auth`,
+      `${APPLICATION_SERVER}/api/auth/signin`,
       requestOptions
     ).then((json: any) => {
       if (json.error) {
         alert(json.error);
       }
 
+      console.log(json);
+
       if (json.token) {
         this.saveAccessTokenFromResponse(json.token);
+        BrowserHistoryHelper.moveTo("/");
+        this.notifyAuthListenersAboutChanges();
+      }
+
+      if (json.username) {
+        this.saveUserNameFromResponse(json.username);
         this.notifyAuthListenersAboutChanges();
       }
 
@@ -53,21 +65,25 @@ export default class AuthRepositoryImpl implements AuthRepository {
     });
   };
 
-  public signUp = (username:string,email:string,password:string,):unknown => {
+  public signUp = (
+    username: string,
+    email: string,
+    password: string
+  ): unknown => {
     const requestOptions: RequestOptions = new RequestOptions();
 
     requestOptions.setBody(
       JSON.stringify({
-        username,
         password,
-        email
+        email,
+        username,
       })
     );
 
     return ApiHelper.fetchPostJson(
-      `${APPLICATION_SERVER}/api/register`,
+      `${APPLICATION_SERVER}/api/auth/signup`,
       requestOptions
-    )
+    );
   };
 
   public signOut(): void {
@@ -84,17 +100,22 @@ export default class AuthRepositoryImpl implements AuthRepository {
   }
 
   private saveAccessTokenFromResponse(token?: string): void {
+    console.log(token);
+    console.log(this.ACCESS_TOKEN_KEY);
     if (token) {
       localStorage.setItem(this.ACCESS_TOKEN_KEY, token);
-    } else {
-      localStorage.setItem(
-        this.ACCESS_TOKEN_KEY,
-        "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImV4cCI6MTkwNzI0MzkwNSwiaWF0IjoxNTkxODgzOTA1fQ.nkc4oxlYlXebk0_0FQbYNc3t1VmETIlgTXOs54XgS9oQyFXOXFZwYKTVZMuXllm_Z1Za0fnO66xMPNz6zVeTkA"
-      );
     }
 
     this.notifyAuthListenersAboutChanges();
   }
+
+  private saveUserNameFromResponse = (username?: string): void => {
+    if (username) {
+      localStorage.setItem(this.USERNAME, username);
+    }
+
+    this.notifyAuthListenersAboutChanges();
+  };
 
   private notifyAuthListenersAboutChanges = (): void => {
     this.authListeners.forEach((listener) => {

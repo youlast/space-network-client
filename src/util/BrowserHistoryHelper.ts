@@ -11,6 +11,11 @@ export default class BrowserHistoryHelper {
     history.push(path);
   }
 
+  static moveToAndReload(path: string): void {
+    history.push(path);
+    window.location.reload();
+  }
+
   static replaceCurrectUrlInHistory(path: string): void {
     history.replace(path);
   }
