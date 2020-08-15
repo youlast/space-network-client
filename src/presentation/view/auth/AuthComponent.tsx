@@ -57,8 +57,8 @@ export default class AuthComponent extends React.Component<Props, State>
         style={{ marginLeft: 0, marginRight: 0 }}
       >
         <div className="auth-container col bg-white border rounded-lg shadow py-4 px-5">
-          <div className="row mt-2 mb-5 justify-content-center">
-            <h4>Space Network</h4>
+          <div className="row mt-2 mb-5 justify-content-center ">
+            <h4 className="text-dark">Space Network</h4>
           </div>
 
           <div className="row mt-2">

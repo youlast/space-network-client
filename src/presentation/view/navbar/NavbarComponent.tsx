@@ -29,9 +29,9 @@ export default class NavbarComponent extends React.Component<Props, State> {
         style={{ background: "white" }}
       >
         <div>
-          <a className="navbar-brand" href="/">
+          <Link to="/" className="navbar-brand">
             SPACE NETWORK
-          </a>
+          </Link>
         </div>
 
         <div className="d-flex">

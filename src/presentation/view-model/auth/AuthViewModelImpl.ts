@@ -96,15 +96,14 @@ export default class AuthViewModelImpl extends ViewModel
         //@ts-ignore
         await this.authRepository
           .signUp(this.userNameQuery, this.emailQuery, this.passwordQuery)
-
           .then((res: string) => {
+            console.log(res);
             if (res === "OK") {
-              BrowserHistoryHelper.moveTo("/sign_in");
+              BrowserHistoryHelper.moveToAndReload("/sign_in");
             }
           });
       } catch (e) {
-        this.errorMessage = e;
-        this.isShowError = true;
+        console.log(e);
       }
 
       super.notifyViewAboutChanges();

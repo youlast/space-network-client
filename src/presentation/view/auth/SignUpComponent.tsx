@@ -52,13 +52,10 @@ export default class SignUpComponent extends React.Component<Props, State>
     const { isShowError, errorMessage } = this.state;
 
     return (
-      <div
-        className="row flex-grow-1 d-flex justify-content-center align-items-center"
-        style={{ marginLeft: 0, marginRight: 0 }}
-      >
+      <div className="row flex-grow-1 d-flex justify-content-center align-items-center ml-0 mr-0">
         <div className="auth-container col bg-white border rounded-lg shadow py-4 px-5">
           <div className="row mt-2 mb-5 justify-content-center">
-            <h4>Space Network</h4>
+            <h4 className="text-dark">Space Network</h4>
           </div>
 
           <div className="row mt-2">
@@ -110,7 +107,7 @@ export default class SignUpComponent extends React.Component<Props, State>
               placeholder="confirm password"
             />
           </div>
-
+          {console.log(errorMessage)}
           {isShowError && (
             <div className="row my-3 text-danger justify-content-center">
               {errorMessage}

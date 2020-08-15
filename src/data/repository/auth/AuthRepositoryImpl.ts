@@ -43,26 +43,26 @@ export default class AuthRepositoryImpl implements AuthRepository {
     return ApiHelper.fetchPostJson(
       `${APPLICATION_SERVER}/api/auth/signin`,
       requestOptions
-    ).then((json: any) => {
-      if (json.error) {
-        alert(json.error);
-      }
+    )
+      .then((res: any) => res.json())
+      .then((json: any) => {
+        if (json.error) {
+          alert(json.error);
+        }
 
-      console.log(json);
+        if (json.token) {
+          this.saveAccessTokenFromResponse(json.token);
+          BrowserHistoryHelper.moveToAndReload("/");
+          this.notifyAuthListenersAboutChanges();
+        }
 
-      if (json.token) {
-        this.saveAccessTokenFromResponse(json.token);
-        BrowserHistoryHelper.moveTo("/");
-        this.notifyAuthListenersAboutChanges();
-      }
+        if (json.username) {
+          this.saveUserNameFromResponse(json.username);
+          this.notifyAuthListenersAboutChanges();
+        }
 
-      if (json.username) {
-        this.saveUserNameFromResponse(json.username);
-        this.notifyAuthListenersAboutChanges();
-      }
-
-      return json;
-    });
+        return json;
+      });
   };
 
   public signUp = (
@@ -83,7 +83,7 @@ export default class AuthRepositoryImpl implements AuthRepository {
     return ApiHelper.fetchPostJson(
       `${APPLICATION_SERVER}/api/auth/signup`,
       requestOptions
-    );
+    ).then((res: any) => res.text());
   };
 
   public signOut(): void {

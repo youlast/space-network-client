@@ -18,7 +18,7 @@ export default class ApiHelper {
       .addHeader("Accept", "application/json");
 
     return fetch(url, optionsWrapper.toRequestInit()).then(
-      (response: Response): Promise<T> => response.json()
+      (response: Response): any => response
     );
   }
 

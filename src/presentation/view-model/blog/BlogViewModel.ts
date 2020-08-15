@@ -1,9 +1,13 @@
 import BaseViewModel from "../BaseViewModel";
 
-export default  interface BlogViewModel extends BaseViewModel{
-  setTitlePost(value:string):void;
+export default interface BlogViewModel extends BaseViewModel {
+  allPosts: any;
 
-  setTextPost(value:string):void
+  setTitlePost(value: string): void;
 
-  onCreateNewPost():Promise<void>
+  setTextPost(value: string): void;
+
+  setImageUrl(value: string): void;
+
+  onCreateNewPost(): Promise<void>;
 }

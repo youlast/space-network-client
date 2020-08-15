@@ -9,6 +9,7 @@ import {
   BrowserRouter as Router,
   Switch,
   Route,
+  Link,
   // @ts-ignore
 } from "react-router-dom";
 import AuthComponent from "./presentation/view/auth/AuthComponent";
@@ -59,10 +60,16 @@ const App = () => {
             <>
               <Route exact path="/">
                 <NavbarComponent authViewModel={authViewModel} />
-                <BlogComponent />
+                <Link to="/blog">
+                  <button className="btn btn-primary"> Go to blog</button>{" "}
+                </Link>
               </Route>
 
-              <Route exact path="/create_post">
+              <Route exact path="/blog">
+                <BlogComponent blogViewModel={blogViewModel} />
+              </Route>
+
+              <Route exact path="/blog/create_post">
                 <BlogCreatePost blogViewModel={blogViewModel} />
               </Route>
             </>
