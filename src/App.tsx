@@ -26,7 +26,7 @@ import BlogViewModelImpl from "./presentation/view-model/blog/BlogViewModelImpl"
 const App = () => {
   //repositories
   const authRepository: AuthRepository = new AuthRepositoryImpl();
-  const blogRepository: BlogRepository = new BlogRepositoryImpl();
+  const blogRepository: BlogRepository = new BlogRepositoryImpl(authRepository);
 
   //view-model
   const authViewModel: AuthViewModel = new AuthViewModelImpl(authRepository);
@@ -45,6 +45,7 @@ const App = () => {
     <div
       className="container-fluid d-flex flex-column"
       style={{
+        height: "200vh",
         backgroundImage:
           "url(https://images.unsplash.com/photo-1417577097439-425fb7dec05e?ixlib=rb-1.2.1&auto=format&fit=crop&w=1489&q=80)",
         backgroundRepeat: "no-repeat",

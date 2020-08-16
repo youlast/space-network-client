@@ -19,7 +19,7 @@ export default class AuthRepositoryImpl implements AuthRepository {
     if (!localStorage.getItem(this.ACCESS_TOKEN_KEY)) {
       throw new Error("Autorization token does not exitst");
     }
-    return `Bearer ${localStorage.getItem(this.ACCESS_TOKEN_KEY) as string}`;
+    return `${localStorage.getItem(this.ACCESS_TOKEN_KEY) as string}`;
   }
 
   public getUserName(): string {

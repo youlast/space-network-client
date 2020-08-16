@@ -3,14 +3,25 @@ import RequestOptions from "../../api/RequestOptions";
 import ApiHelper from "../../api/ApiHelper";
 import { APPLICATION_SERVER } from "../../../constants";
 import PostsResponse from "../../models/blog/PostsResponse";
+import AuthRepository from "../auth/AuthRepository";
 
 export default class BlogRepositoryImpl implements BlogRepository {
+  private readonly authRepository: AuthRepository;
+
+  constructor(authRepository: AuthRepository) {
+    this.authRepository = authRepository;
+  }
+
   public createNewPost = (
     title: string,
     content: string,
     imageUrl: string
   ): unknown => {
     const requestOptions: RequestOptions = new RequestOptions();
+    requestOptions.addHeader(
+      "Authorization",
+      this.authRepository.getAccessToken()
+    );
 
     requestOptions.setBody(
       JSON.stringify({

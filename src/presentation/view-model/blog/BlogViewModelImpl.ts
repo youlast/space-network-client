@@ -62,11 +62,11 @@ export default class BlogViewModelImpl extends ViewModel
       await this.blogRepository
         .createNewPost(this.titlePost, this.textPost, this.imageUrl)
         .then((res: string) => {
-          if (res === "OK") {
+          /* if (res === "Created" || res === "OK") {
             BrowserHistoryHelper.moveToAndReload("/blog");
           } else {
             alert(res);
-          }
+          } */
         });
     } catch (e) {
       alert(e);
