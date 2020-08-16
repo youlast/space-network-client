@@ -45,7 +45,6 @@ const App = () => {
     <div
       className="container-fluid d-flex flex-column"
       style={{
-        height: "100vh",
         backgroundImage:
           "url(https://images.unsplash.com/photo-1417577097439-425fb7dec05e?ixlib=rb-1.2.1&auto=format&fit=crop&w=1489&q=80)",
         backgroundRepeat: "no-repeat",
@@ -61,15 +60,17 @@ const App = () => {
               <Route exact path="/">
                 <NavbarComponent authViewModel={authViewModel} />
                 <Link to="/blog">
-                  <button className="btn btn-primary"> Go to blog</button>{" "}
+                  <button className="btn btn-primary"> Go to blog</button>
                 </Link>
               </Route>
 
               <Route exact path="/blog">
+                <NavbarComponent authViewModel={authViewModel} />
                 <BlogComponent blogViewModel={blogViewModel} />
               </Route>
 
               <Route exact path="/blog/create_post">
+                <NavbarComponent authViewModel={authViewModel} />
                 <BlogCreatePost blogViewModel={blogViewModel} />
               </Route>
             </>

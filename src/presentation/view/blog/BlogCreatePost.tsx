@@ -49,7 +49,7 @@ class BlogCreatePost extends React.Component<Props> {
         <div className="row row-style">
           <input
             type="text"
-            placeholder="image for post..."
+            placeholder="image for post... (now only url)"
             onChange={(e: React.FormEvent<HTMLInputElement>) =>
               this.blogViewModel.setImageUrl(e.currentTarget.value)
             }

@@ -2,6 +2,7 @@ import BlogRepository from "./BlogRepository";
 import RequestOptions from "../../api/RequestOptions";
 import ApiHelper from "../../api/ApiHelper";
 import { APPLICATION_SERVER } from "../../../constants";
+import PostsResponse from "../../models/blog/PostsResponse";
 
 export default class BlogRepositoryImpl implements BlogRepository {
   public createNewPost = (
@@ -27,7 +28,7 @@ export default class BlogRepositoryImpl implements BlogRepository {
     });
   };
 
-  public getAllPosts = (): Promise<void> => {
+  public getAllPosts = (): Promise<PostsResponse[]> => {
     return ApiHelper.fetchGetJson(`${APPLICATION_SERVER}/api/blog/posts`);
   };
 }

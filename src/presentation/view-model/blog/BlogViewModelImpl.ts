@@ -3,13 +3,14 @@ import BlogViewModel from "./BlogViewModel";
 import BaseView from "../../view/BaseView";
 import BlogRepository from "../../../data/repository/blog/BlogRepository";
 import BrowserHistoryHelper from "../../../util/BrowserHistoryHelper";
+import PostsResponse from "../../../data/models/blog/PostsResponse";
 
 export default class BlogViewModelImpl extends ViewModel
   implements BlogViewModel {
   public titlePost: string;
   public textPost: string;
   public imageUrl: string;
-  public allPosts: any;
+  public allPosts: PostsResponse[];
 
   private readonly blogRepository: BlogRepository;
   constructor(blogRepository: BlogRepository) {
@@ -45,11 +46,11 @@ export default class BlogViewModelImpl extends ViewModel
     }
   };
 
-  public getPosts = (): void => {
+  public getPosts = async (): Promise<void> => {
     try {
-      this.blogRepository
+      await this.blogRepository
         .getAllPosts()
-        .then((res: any) => this.setPostsData(res));
+        .then((res: PostsResponse[]) => this.setPostsData(res));
     } catch (e) {
       alert(e);
     }
@@ -60,7 +61,7 @@ export default class BlogViewModelImpl extends ViewModel
       //@ts-ignore
       await this.blogRepository
         .createNewPost(this.titlePost, this.textPost, this.imageUrl)
-        .then((res: any) => {
+        .then((res: string) => {
           if (res === "OK") {
             BrowserHistoryHelper.moveToAndReload("/blog");
           } else {
@@ -72,7 +73,7 @@ export default class BlogViewModelImpl extends ViewModel
     }
   };
 
-  private setPostsData = (posts: any): void => {
+  private setPostsData = (posts: PostsResponse[]): void => {
     this.allPosts = posts;
     super.notifyViewAboutChanges();
   };
