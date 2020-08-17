@@ -45,7 +45,6 @@ const App = () => {
     <div
       className="container-fluid d-flex flex-column"
       style={{
-        height: "200vh",
         backgroundImage:
           "url(https://images.unsplash.com/photo-1417577097439-425fb7dec05e?ixlib=rb-1.2.1&auto=format&fit=crop&w=1489&q=80)",
         backgroundRepeat: "no-repeat",

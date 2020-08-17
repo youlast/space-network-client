@@ -16,7 +16,7 @@ export default class BlogRepositoryImpl implements BlogRepository {
     title: string,
     content: string,
     imageUrl: string
-  ): unknown => {
+  ): Promise<string> => {
     const requestOptions: RequestOptions = new RequestOptions();
     requestOptions.addHeader(
       "Authorization",
@@ -41,5 +41,39 @@ export default class BlogRepositoryImpl implements BlogRepository {
 
   public getAllPosts = (): Promise<PostsResponse[]> => {
     return ApiHelper.fetchGetJson(`${APPLICATION_SERVER}/api/blog/posts`);
+  };
+
+  public deletePost = (idPost: number): Promise<void> => {
+    const requestOptions: RequestOptions = new RequestOptions();
+    requestOptions.addHeader(
+      "Authorization",
+      this.authRepository.getAccessToken()
+    );
+
+    requestOptions.setBody(JSON.stringify({ idPost }));
+
+    return ApiHelper.fetchDeleteJson(
+      `${APPLICATION_SERVER}/api/blog/delete_post`,
+      requestOptions
+    ).then((res: any) => res.text());
+  };
+
+  public updatePost = (
+    title: string,
+    content: string,
+    imageUrl: string
+  ): Promise<void> => {
+    const requestOptions: RequestOptions = new RequestOptions();
+    requestOptions.addHeader(
+      "Authorization",
+      this.authRepository.getAccessToken()
+    );
+
+    requestOptions.setBody(JSON.stringify({ title, content, imageUrl }));
+
+    return ApiHelper.fetchPutJson(
+      `${APPLICATION_SERVER}/api/blog/update_post`,
+      requestOptions
+    );
   };
 }

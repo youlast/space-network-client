@@ -7,7 +7,7 @@ interface Props {
   blogViewModel: BlogViewModel;
 }
 
-class BlogCreatePost extends React.Component<Props> {
+export default class BlogCreatePost extends React.Component<Props> {
   private readonly blogViewModel: BlogViewModel;
   constructor(props: Props) {
     super(props);
@@ -76,5 +76,3 @@ class BlogCreatePost extends React.Component<Props> {
     );
   }
 }
-
-export default BlogCreatePost;

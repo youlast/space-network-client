@@ -107,7 +107,6 @@ export default class SignUpComponent extends React.Component<Props, State>
               placeholder="confirm password"
             />
           </div>
-          {console.log(errorMessage)}
           {isShowError && (
             <div className="row my-3 text-danger justify-content-center">
               {errorMessage}

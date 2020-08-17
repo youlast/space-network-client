@@ -10,4 +10,6 @@ export default interface BlogViewModel extends BaseViewModel {
   setImageUrl(value: string): void;
 
   onCreateNewPost(): Promise<void>;
+
+  onDeletePost(idItem: number): Promise<void>;
 }

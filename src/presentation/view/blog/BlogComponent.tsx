@@ -59,7 +59,7 @@ class BlogComponent extends React.Component<Props, State> {
                   {Object.keys(post).map((columnName: string) => {
                     if (columnName === "id") return undefined;
 
-                    if (columnName === "imagePost") {
+                    if (columnName === "imagePost" && post.imagePost) {
                       return (
                         <div className="pt-2">
                           <img
@@ -77,6 +77,17 @@ class BlogComponent extends React.Component<Props, State> {
                       return <div>{post.content}</div>;
                     }
                   })}
+                  <div>
+                    <button className="btn btn-primary">Edit</button>
+                    <button
+                      className="btn btn-primary"
+                      onClick={(): Promise<void> =>
+                        this.blogViewModel.onDeletePost(post.id)
+                      }
+                    >
+                      Delete
+                    </button>
+                  </div>
                   <div
                     style={{
                       height: "2px",

@@ -62,12 +62,34 @@ export default class BlogViewModelImpl extends ViewModel
       await this.blogRepository
         .createNewPost(this.titlePost, this.textPost, this.imageUrl)
         .then((res: string) => {
-          /* if (res === "Created" || res === "OK") {
+          if (res === "Created" || res === "OK") {
             BrowserHistoryHelper.moveToAndReload("/blog");
           } else {
             alert(res);
-          } */
+          }
         });
+    } catch (e) {
+      alert(e);
+    }
+  };
+
+  public onDeletePost = async (idItem: number): Promise<void> => {
+    this.allPosts = this.allPosts.filter((post: any) => post.id !== idItem);
+    super.notifyViewAboutChanges();
+    try {
+      await this.blogRepository.deletePost(idItem);
+    } catch (e) {
+      alert(e);
+    }
+  };
+
+  public onUpdatePost = async () => {
+    try {
+      await this.blogRepository.updatePost(
+        this.titlePost,
+        this.textPost,
+        this.imageUrl
+      );
     } catch (e) {
       alert(e);
     }
