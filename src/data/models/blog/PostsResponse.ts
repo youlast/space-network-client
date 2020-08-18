@@ -3,4 +3,5 @@ export default interface PostsResponse {
   title: string;
   content: string;
   imagePost?: string;
+  authorPost: string;
 }

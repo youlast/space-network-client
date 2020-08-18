@@ -22,6 +22,9 @@ import BlogRepository from "./data/repository/blog/BlogRepository";
 import BlogRepositoryImpl from "./data/repository/blog/BlogRepositoryImpl";
 import BlogViewModel from "./presentation/view-model/blog/BlogViewModel";
 import BlogViewModelImpl from "./presentation/view-model/blog/BlogViewModelImpl";
+import FullBlogComponent from "./presentation/view/blog/FullBlogComponent";
+import FullBlogViewModel from "./presentation/view-model/blog/FullBlogViewModel";
+import FullBlogViewModelImpl from "./presentation/view-model/blog/FullBlogViewModelImpl";
 
 const App = () => {
   //repositories
@@ -31,6 +34,9 @@ const App = () => {
   //view-model
   const authViewModel: AuthViewModel = new AuthViewModelImpl(authRepository);
   const blogViewModel: BlogViewModel = new BlogViewModelImpl(blogRepository);
+  const fullBlogViewModel: FullBlogViewModel = new FullBlogViewModelImpl(
+    blogRepository
+  );
 
   const [isAuthorized, setAuthorized] = useState(authRepository.isAuthorized());
   useEffect(() => {
@@ -50,6 +56,7 @@ const App = () => {
         backgroundRepeat: "no-repeat",
         backgroundSize: "cover",
         paddingLeft: 0,
+        height: "150vh",
         paddingRight: 0,
       }}
     >
@@ -60,7 +67,7 @@ const App = () => {
               <Route exact path="/">
                 <NavbarComponent authViewModel={authViewModel} />
                 <Link to="/blog">
-                  <button className="btn btn-primary"> Go to blog</button>
+                  <button className="btn btn-primary">Go to blog</button>
                 </Link>
               </Route>
 
@@ -72,6 +79,14 @@ const App = () => {
               <Route exact path="/blog/create_post">
                 <NavbarComponent authViewModel={authViewModel} />
                 <BlogCreatePost blogViewModel={blogViewModel} />
+              </Route>
+
+              <Route path="/blog/item">
+                <NavbarComponent authViewModel={authViewModel} />
+                <FullBlogComponent
+                  blogViewModel={blogViewModel}
+                  fullBlogViewModel={fullBlogViewModel}
+                />
               </Route>
             </>
           ) : (

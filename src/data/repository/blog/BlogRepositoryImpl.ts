@@ -28,6 +28,7 @@ export default class BlogRepositoryImpl implements BlogRepository {
         title,
         content,
         imagePost: imageUrl,
+        username: this.authRepository.getUserName(),
       })
     );
 

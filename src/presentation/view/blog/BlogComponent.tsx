@@ -59,6 +59,10 @@ class BlogComponent extends React.Component<Props, State> {
                   {Object.keys(post).map((columnName: string) => {
                     if (columnName === "id") return undefined;
 
+                    if (columnName === "authorPost") {
+                      return <div>Author post {post.authorPost}</div>;
+                    }
+
                     if (columnName === "imagePost" && post.imagePost) {
                       return (
                         <div className="pt-2">
@@ -71,23 +75,30 @@ class BlogComponent extends React.Component<Props, State> {
                       );
                     }
                     if (columnName === "title") {
-                      return <h2 className="pt-4">{post.title}</h2>;
+                      return (
+                        <h2 className="pt-4">
+                          <Link to={`/blog/item?id=${post.id}`}>
+                            {post.title}
+                          </Link>
+                        </h2>
+                      );
                     }
+
                     if (columnName === "content") {
-                      return <div>{post.content}</div>;
+                      return (
+                        <div>
+                          {post.content && post.content.length >= 75
+                            ? post.content.slice(0, 150)
+                            : post.content}
+                          <div>
+                            <Link to={`/blog/item?id=${post.id}`}>
+                              Read More
+                            </Link>
+                          </div>
+                        </div>
+                      );
                     }
                   })}
-                  <div>
-                    <button className="btn btn-primary">Edit</button>
-                    <button
-                      className="btn btn-primary"
-                      onClick={(): Promise<void> =>
-                        this.blogViewModel.onDeletePost(post.id)
-                      }
-                    >
-                      Delete
-                    </button>
-                  </div>
                   <div
                     style={{
                       height: "2px",
