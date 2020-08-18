@@ -43,6 +43,7 @@ class BlogComponent extends React.Component<Props, State> {
 
   render() {
     const { allPosts } = this.state;
+
     return (
       <div className="container">
         <div className="row justify-content-end pt-3">
@@ -52,63 +53,53 @@ class BlogComponent extends React.Component<Props, State> {
         </div>
 
         <div>
-          {allPosts &&
-            allPosts.map((post: PostsResponse) => {
-              return (
-                <>
-                  {Object.keys(post).map((columnName: string) => {
-                    if (columnName === "id") return undefined;
+          {allPosts.map((post: PostsResponse) => {
+            const transformationDate = new Date(post.datePost);
 
-                    if (columnName === "authorPost") {
-                      return <div>Author post {post.authorPost}</div>;
-                    }
+            return (
+              <div className="post-preview pt-4">
+                <div className="col-4">
+                  <div className="d-flex justify-content-around post-meta">
+                    <div>Author post: {post.authorPost}</div>
+                    <div>
+                      {`${transformationDate.getDate()}.${
+                        transformationDate.getMonth() <= 10
+                          ? "0" + transformationDate.getMonth()
+                          : transformationDate.getMonth()
+                      }.${transformationDate.getFullYear()}`}{" "}
+                      at{" "}
+                      {`${transformationDate.getHours()}:${
+                        transformationDate.getMinutes() <= 9
+                          ? "0" + transformationDate.getMinutes()
+                          : transformationDate.getMinutes()
+                      }`}
+                    </div>
+                  </div>
+                </div>
 
-                    if (columnName === "imagePost" && post.imagePost) {
-                      return (
-                        <div className="pt-2">
-                          <img
-                            src={post.imagePost}
-                            alt="post"
-                            style={{ width: "200px" }}
-                          />
-                        </div>
-                      );
-                    }
-                    if (columnName === "title") {
-                      return (
-                        <h2 className="pt-4">
-                          <Link to={`/blog/item?id=${post.id}`}>
-                            {post.title}
-                          </Link>
-                        </h2>
-                      );
-                    }
-
-                    if (columnName === "content") {
-                      return (
-                        <div>
-                          {post.content && post.content.length >= 75
-                            ? post.content.slice(0, 150)
-                            : post.content}
-                          <div>
-                            <Link to={`/blog/item?id=${post.id}`}>
-                              Read More
-                            </Link>
-                          </div>
-                        </div>
-                      );
-                    }
-                  })}
-                  <div
-                    style={{
-                      height: "2px",
-                      width: "100%",
-                      background: "white",
-                    }}
-                  />
-                </>
-              );
-            })}
+                <div>
+                  <h2 className="post-title">
+                    <Link to={`/blog/item?id=${post.id}`}>{post.title}</Link>
+                  </h2>
+                </div>
+                <div className="post-body">
+                  {post.content && post.content.length >= 400
+                    ? post.content.slice(0, 400)
+                    : post.content}
+                  <div className="pl-2" style={{ display: "initial" }}>
+                    <Link to={`/blog/item?id=${post.id}`}>Read More</Link>
+                  </div>
+                </div>
+                <div
+                  style={{
+                    height: "2px",
+                    width: "100%",
+                    background: "white",
+                  }}
+                />
+              </div>
+            );
+          })}
         </div>
       </div>
     );

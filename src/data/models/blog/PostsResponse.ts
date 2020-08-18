@@ -4,4 +4,5 @@ export default interface PostsResponse {
   content: string;
   imagePost?: string;
   authorPost: string;
+  datePost: Date;
 }

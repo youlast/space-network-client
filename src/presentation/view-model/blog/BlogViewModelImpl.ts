@@ -63,7 +63,7 @@ export default class BlogViewModelImpl extends ViewModel
         .createNewPost(this.titlePost, this.textPost, this.imageUrl)
         .then((res: string) => {
           if (res === "Created" || res === "OK") {
-            BrowserHistoryHelper.moveToAndReload("/blog");
+            BrowserHistoryHelper.moveToAndReload("/blog?");
           } else {
             alert(res);
           }
@@ -74,22 +74,13 @@ export default class BlogViewModelImpl extends ViewModel
   };
 
   public onDeletePost = async (idItem: number): Promise<void> => {
-    this.allPosts = this.allPosts.filter((post: any) => post.id !== idItem);
+    this.allPosts = this.allPosts.filter(
+      (post: PostsResponse) => post.id !== idItem
+    );
     super.notifyViewAboutChanges();
     try {
       await this.blogRepository.deletePost(idItem);
-    } catch (e) {
-      alert(e);
-    }
-  };
-
-  public onUpdatePost = async () => {
-    try {
-      await this.blogRepository.updatePost(
-        this.titlePost,
-        this.textPost,
-        this.imageUrl
-      );
+      BrowserHistoryHelper.moveToAndReload("/blog?");
     } catch (e) {
       alert(e);
     }

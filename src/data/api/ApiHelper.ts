@@ -45,13 +45,13 @@ export default class ApiHelper {
       optionsWrapper = new RequestOptions();
     }
     optionsWrapper
-      .addHeader("Access-Control-Allow-Credentials", "true")
       .setMethod("PUT")
-      .addHeader("Content-Type", "application/json")
-      .addHeader("Access-Control-Allow-Methods", "PUT");
+      .addHeader("Access-Control-Allow-Methods", "GET,PUT")
+      .addHeader("Access-Control-Allow-Credentials", "true")
+      .addHeader("Content-Type", "application/json");
 
     return fetch(url, optionsWrapper.toRequestInit()).then(
-      (response: Response): Promise<T> => response.json()
+      (response: Response): any => response
     );
   }
 

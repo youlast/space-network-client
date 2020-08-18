@@ -11,6 +11,7 @@ interface Props {
 
 interface State {
   postByIdData: PostsResponse[];
+  isShowFieldsForChanges: boolean;
 }
 
 export default class FullBlogComponent extends React.Component<Props, State>
@@ -28,6 +29,7 @@ export default class FullBlogComponent extends React.Component<Props, State>
 
     this.state = {
       postByIdData: fullBlogViewModel.postByIdData,
+      isShowFieldsForChanges: fullBlogViewModel.isShowFieldsForChanges,
     };
   }
 
@@ -42,57 +44,150 @@ export default class FullBlogComponent extends React.Component<Props, State>
   public onViewModelChanged(): void {
     this.setState({
       postByIdData: this.fullBlogViewModel.postByIdData,
+      isShowFieldsForChanges: this.fullBlogViewModel.isShowFieldsForChanges,
     });
   }
 
   public render(): JSX.Element {
-    const { postByIdData } = this.state;
+    const { postByIdData, isShowFieldsForChanges } = this.state;
     return (
-      <div className="p-4">
-        {postByIdData &&
-          postByIdData.map((post: PostsResponse) => {
-            return (
-              <>
-                {Object.keys(post).map((columnName: string) => {
-                  if (columnName === "id") return undefined;
+      <div className="p-4 ">
+        <div className="container ">
+          {isShowFieldsForChanges && postByIdData
+            ? postByIdData.map((post: PostsResponse) => {
+                return (
+                  <div>
+                    <form>
+                      <div className="text-center">
+                        <div className="form-group row">
+                          <label className="col-xl-1 col-lg-3 col-form-label">
+                            Title
+                          </label>
+                          <div className=" col-xl-8 col-lg-6">
+                            <input
+                              type="text"
+                              className="form-control"
+                              defaultValue={post.title}
+                              onChange={(
+                                e: React.FormEvent<HTMLInputElement>
+                              ) =>
+                                this.fullBlogViewModel.setChangedTitle(
+                                  e.currentTarget.value
+                                )
+                              }
+                            />
+                          </div>
+                        </div>
 
-                  if (columnName === "imagePost" && post.imagePost) {
-                    return (
-                      <div className="pt-2 text-center">
+                        <div className="form-group row">
+                          <label className="col-xl-1 col-lg-3 col-form-label">
+                            Image
+                          </label>
+                          <div className=" col-xl-8 col-lg-6">
+                            <input
+                              type="text"
+                              className="form-control"
+                              defaultValue={post.imagePost}
+                              onChange={(
+                                e: React.FormEvent<HTMLInputElement>
+                              ): void =>
+                                this.fullBlogViewModel.setChangedImage(
+                                  e.currentTarget.value
+                                )
+                              }
+                            />
+                          </div>
+                        </div>
+
+                        <div className="form-group row">
+                          <label className="col-xl-1 col-lg-3 col-form-label">
+                            Content
+                          </label>
+                          <div className=" col-xl-8 col-lg-6">
+                            <textarea
+                              className="form-control"
+                              defaultValue={post.content}
+                              rows={post.content.length >= 800 ? 10 : 5}
+                              onChange={(
+                                e: React.FormEvent<HTMLTextAreaElement>
+                              ) =>
+                                this.fullBlogViewModel.setChangedContent(
+                                  e.currentTarget.value
+                                )
+                              }
+                            />
+                          </div>
+                        </div>
+                        <div className="text-center">
+                          <button
+                            className="btn btn-dark"
+                            onClick={(): Promise<void> =>
+                              this.fullBlogViewModel.onSubmitChangedPost()
+                            }
+                          >
+                            Submit changes
+                          </button>
+                        </div>
+                      </div>
+                    </form>
+                  </div>
+                );
+              })
+            : undefined}
+
+          {postByIdData &&
+            !isShowFieldsForChanges &&
+            postByIdData.map((post: PostsResponse) => {
+              return (
+                <div>
+                  <div>
+                    <h2 className="pt-4">
+                      <div className="row">
+                        <div className="col-10">
+                          <div>{post.title}</div>
+                        </div>
+                        <div className="col-2">
+                          <div className="d-flex justify-content-around">
+                            <button
+                              className="btn btn-danger"
+                              onClick={(): Promise<void> =>
+                                this.blogViewModel.onDeletePost(post.id)
+                              }
+                            >
+                              Delete
+                            </button>
+
+                            <button
+                              className="btn btn-warning"
+                              onClick={(): void =>
+                                this.fullBlogViewModel.setIsShowFieldsForChanges(
+                                  true
+                                )
+                              }
+                            >
+                              Edit
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </h2>
+                    <div className="pt-2 text-center">
+                      {post.imagePost && (
                         <img
                           src={post.imagePost}
                           alt="post"
                           style={{ width: "1000px" }}
                         />
-                      </div>
-                    );
-                  }
-                  if (columnName === "title") {
-                    return (
-                      <h2 className="pt-4">
-                        <div>{post.title}</div>
-                      </h2>
-                    );
-                  }
-
-                  if (columnName === "content") {
-                    return <div>{post.content}</div>;
-                  }
-                })}
-
-                <div>
-                  <button
-                    className="btn btn-primary"
-                    onClick={(): Promise<void> =>
-                      this.blogViewModel.onDeletePost(post.id)
-                    }
-                  >
-                    Delete post
-                  </button>
+                      )}
+                    </div>
+                  </div>
+                  <div>
+                    <div>{post.content}</div>
+                  </div>
                 </div>
-              </>
-            );
-          })}
+              );
+            })}
+        </div>
       </div>
     );
   }

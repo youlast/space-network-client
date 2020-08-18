@@ -4,6 +4,7 @@ import ApiHelper from "../../api/ApiHelper";
 import { APPLICATION_SERVER } from "../../../constants";
 import PostsResponse from "../../models/blog/PostsResponse";
 import AuthRepository from "../auth/AuthRepository";
+import BrowserHistoryHelper from "../../../util/BrowserHistoryHelper";
 
 export default class BlogRepositoryImpl implements BlogRepository {
   private readonly authRepository: AuthRepository;
@@ -60,9 +61,10 @@ export default class BlogRepositoryImpl implements BlogRepository {
   };
 
   public updatePost = (
-    title: string,
-    content: string,
-    imageUrl: string
+    changedTitle: string,
+    changedContent: string,
+    changedImage: string,
+    itemId: string | undefined
   ): Promise<void> => {
     const requestOptions: RequestOptions = new RequestOptions();
     requestOptions.addHeader(
@@ -70,11 +72,21 @@ export default class BlogRepositoryImpl implements BlogRepository {
       this.authRepository.getAccessToken()
     );
 
-    requestOptions.setBody(JSON.stringify({ title, content, imageUrl }));
+    requestOptions.setBody(
+      JSON.stringify({
+        title: changedTitle,
+        content: changedContent,
+        imagePost: changedImage,
+        idPost: itemId,
+      })
+    );
 
     return ApiHelper.fetchPutJson(
       `${APPLICATION_SERVER}/api/blog/update_post`,
       requestOptions
-    );
+    ).then((res: any) => {
+      BrowserHistoryHelper.moveToAndReload("/blog?");
+      return res.text();
+    });
   };
 }

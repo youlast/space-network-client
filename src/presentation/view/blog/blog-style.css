@@ -22,3 +22,24 @@ input {
   width: 600px;
   height: 50px;
 }
+
+/*Post preview styles start*/
+.post-title a {
+  font-size: 28px;
+  color: white;
+  text-decoration: none;
+}
+
+.post-title a:hover {
+  color: wheat;
+}
+
+.post-meta {
+  font-size: 13px;
+}
+
+.post-body {
+  font-size: 16px;
+}
+
+/*Post preview styles end */
