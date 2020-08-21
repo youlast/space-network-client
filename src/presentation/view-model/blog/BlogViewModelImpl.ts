@@ -58,12 +58,11 @@ export default class BlogViewModelImpl extends ViewModel
 
   public onCreateNewPost = async (): Promise<void> => {
     try {
-      //@ts-ignore
       await this.blogRepository
         .createNewPost(this.titlePost, this.textPost, this.imageUrl)
         .then((res: string) => {
-          if (res === "Created" || res === "OK") {
-            BrowserHistoryHelper.moveToAndReload("/blog?");
+          if (res === "OK") {
+            BrowserHistoryHelper.moveTo("/blog");
           } else {
             alert(res);
           }
@@ -80,7 +79,7 @@ export default class BlogViewModelImpl extends ViewModel
     super.notifyViewAboutChanges();
     try {
       await this.blogRepository.deletePost(idItem);
-      BrowserHistoryHelper.moveToAndReload("/blog?");
+      BrowserHistoryHelper.moveTo("/blog");
     } catch (e) {
       alert(e);
     }

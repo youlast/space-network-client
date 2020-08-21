@@ -82,17 +82,12 @@ export default class FullBlogViewModelImpl extends ViewModel
   public onSubmitChangedPost = async (): Promise<void> => {
     this.checkOnUpdates();
     try {
-      await this.blogRepository
-        .updatePost(
-          this.changedTitle,
-          this.changedContent,
-          //@ts-ignore
-          this.changedImage,
-          this.itemId
-        )
-        .then((res: string) => {
-          if (res === "OK") console.log("updated");
-        });
+      await this.blogRepository.updatePost(
+        this.changedTitle,
+        this.changedContent,
+        this.changedImage,
+        this.itemId
+      );
     } catch (e) {
       alert(e);
     }

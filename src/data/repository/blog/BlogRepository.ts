@@ -9,12 +9,12 @@ export default interface BlogRepository {
 
   getAllPosts(): Promise<PostsResponse[]>;
 
-  deletePost(idItem: number): Promise<void>;
+  deletePost(idItem: number): Promise<string>;
 
   updatePost(
     title: string,
     content: string,
-    imageUrl: string,
+    imageUrl: string | undefined,
     itemId: string | undefined
-  ): Promise<void>;
+  ): Promise<string>;
 }

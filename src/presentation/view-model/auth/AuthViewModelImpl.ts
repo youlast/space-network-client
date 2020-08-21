@@ -69,7 +69,6 @@ export default class AuthViewModelImpl extends ViewModel
   public onSignIn = async (): Promise<void> => {
     if (this.isValidSignInForm()) {
       try {
-        //@ts-ignore
         await this.authRepository.signIn(this.passwordQuery, this.emailQuery);
       } catch (e) {
         this.errorMessage = e.message;
@@ -97,9 +96,8 @@ export default class AuthViewModelImpl extends ViewModel
         await this.authRepository
           .signUp(this.userNameQuery, this.emailQuery, this.passwordQuery)
           .then((res: string) => {
-            console.log(res);
             if (res === "OK") {
-              BrowserHistoryHelper.moveToAndReload("/sign_in");
+              BrowserHistoryHelper.moveTo("/sign_in");
             }
           });
       } catch (e) {

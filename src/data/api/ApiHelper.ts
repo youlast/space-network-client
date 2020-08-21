@@ -1,10 +1,10 @@
 import RequestOptions from "./RequestOptions";
 
 export default class ApiHelper {
-  public static async fetchPostJson<T>(
+  public static async fetchPostJson(
     url: string,
     requestOptions?: RequestOptions
-  ): Promise<T> {
+  ): Promise<string> {
     let optionsWrapper = requestOptions;
     if (!optionsWrapper) {
       optionsWrapper = new RequestOptions();
@@ -18,7 +18,7 @@ export default class ApiHelper {
       .addHeader("Accept", "application/json");
 
     return fetch(url, optionsWrapper.toRequestInit()).then(
-      (response: Response): any => response
+      (response: Response): Promise<string> => response.text()
     );
   }
 
@@ -39,26 +39,27 @@ export default class ApiHelper {
   public static async fetchPutJson<T>(
     url: string,
     requestOptions?: RequestOptions
-  ): Promise<T> {
+  ): Promise<string> {
     let optionsWrapper = requestOptions;
     if (!optionsWrapper) {
       optionsWrapper = new RequestOptions();
     }
     optionsWrapper
       .setMethod("PUT")
+      .setCredentials("include")
+      .addHeader("Content-Type", "application/json")
       .addHeader("Access-Control-Allow-Methods", "GET,PUT")
-      .addHeader("Access-Control-Allow-Credentials", "true")
-      .addHeader("Content-Type", "application/json");
+      .addHeader("Accept", "application/json");
 
     return fetch(url, optionsWrapper.toRequestInit()).then(
-      (response: Response): any => response
+      (response: Response): Promise<string> => response.text()
     );
   }
 
   public static async fetchDeleteJson<T>(
     url: string,
     requestOptions?: RequestOptions
-  ): Promise<T> {
+  ): Promise<string> {
     let optionsWrapper = requestOptions;
     if (!optionsWrapper) {
       optionsWrapper = new RequestOptions();
@@ -70,7 +71,7 @@ export default class ApiHelper {
       .addHeader("Access-Control-Allow-Methods", "DELETE");
 
     return fetch(url, optionsWrapper.toRequestInit()).then(
-      (response: Response): any => response
+      (response: Response): Promise<string> => response.text()
     );
   }
 }

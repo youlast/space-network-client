@@ -5,13 +5,7 @@ import AuthViewModelImpl from "./presentation/view-model/auth/AuthViewModelImpl"
 import AuthViewModel from "./presentation/view-model/auth/AuthViewModel";
 import SignUpComponent from "./presentation/view/auth/SignUpComponent";
 
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Link,
-  // @ts-ignore
-} from "react-router-dom";
+import { Router, Switch, Route, Link, BrowserRouter } from "react-router-dom";
 import AuthComponent from "./presentation/view/auth/AuthComponent";
 import BrowserHistoryHelper from "./util/BrowserHistoryHelper";
 import AuthListener from "./data/models/auth/AuthListener";
@@ -61,50 +55,49 @@ const App = () => {
       }}
     >
       <Router history={BrowserHistoryHelper.getHistory()}>
-        <Switch>
-          {isAuthorized ? (
-            <>
-              <Route exact path="/">
-                <NavbarComponent authViewModel={authViewModel} />
-                <Link to="/blog">
-                  <button className="btn btn-primary">Go to blog</button>
-                </Link>
-              </Route>
+        <BrowserRouter>
+          <NavbarComponent authViewModel={authViewModel} />
+          <Switch>
+            {isAuthorized ? (
+              <>
+                <Route exact path="/">
+                  <Link to="/blog">
+                    <button className="btn btn-primary">Go to blog</button>
+                  </Link>
+                </Route>
 
-              <Route exact path="/blog">
-                <NavbarComponent authViewModel={authViewModel} />
-                <BlogComponent blogViewModel={blogViewModel} />
-              </Route>
+                <Route exact path="/blog">
+                  <BlogComponent blogViewModel={blogViewModel} />
+                </Route>
 
-              <Route exact path="/blog/create_post">
-                <NavbarComponent authViewModel={authViewModel} />
-                <BlogCreatePost blogViewModel={blogViewModel} />
-              </Route>
+                <Route exact path="/blog/create_post">
+                  <BlogCreatePost blogViewModel={blogViewModel} />
+                </Route>
 
-              <Route path="/blog/item">
-                <NavbarComponent authViewModel={authViewModel} />
-                <FullBlogComponent
-                  blogViewModel={blogViewModel}
-                  fullBlogViewModel={fullBlogViewModel}
-                />
-              </Route>
-            </>
-          ) : (
-            <>
-              <Route exact path="/">
-                <AuthComponent authViewModel={authViewModel} />
-              </Route>
+                <Route path="/blog/item">
+                  <FullBlogComponent
+                    blogViewModel={blogViewModel}
+                    fullBlogViewModel={fullBlogViewModel}
+                  />
+                </Route>
+              </>
+            ) : (
+              <>
+                <Route exact path="/">
+                  <AuthComponent authViewModel={authViewModel} />
+                </Route>
 
-              <Route exact path="/sign_in">
-                <AuthComponent authViewModel={authViewModel} />
-              </Route>
+                <Route exact path="/sign_in">
+                  <AuthComponent authViewModel={authViewModel} />
+                </Route>
 
-              <Route exact path="/sign_up">
-                <SignUpComponent authViewModel={authViewModel} />
-              </Route>
-            </>
-          )}
-        </Switch>
+                <Route exact path="/sign_up">
+                  <SignUpComponent authViewModel={authViewModel} />
+                </Route>
+              </>
+            )}
+          </Switch>
+        </BrowserRouter>
       </Router>
     </div>
   );

@@ -43,16 +43,16 @@ export default class AuthRepositoryImpl implements AuthRepository {
     return ApiHelper.fetchPostJson(
       `${APPLICATION_SERVER}/api/auth/signin`,
       requestOptions
-    )
-      .then((res: any) => res.json())
-      .then((json: any) => {
+    ).then((res: string) => {
+      if (res.includes("{")) {
+        const json = JSON.parse(res);
         if (json.error) {
           alert(json.error);
         }
 
         if (json.token) {
           this.saveAccessTokenFromResponse(json.token);
-          BrowserHistoryHelper.moveToAndReload("/");
+          BrowserHistoryHelper.moveTo("/");
           this.notifyAuthListenersAboutChanges();
         }
 
@@ -60,9 +60,10 @@ export default class AuthRepositoryImpl implements AuthRepository {
           this.saveUserNameFromResponse(json.username);
           this.notifyAuthListenersAboutChanges();
         }
+      }
 
-        return json;
-      });
+      return res;
+    });
   };
 
   public signUp = (
