@@ -63,6 +63,7 @@ export default class BlogViewModelImpl extends ViewModel
         .then((res: string) => {
           if (res === "OK") {
             BrowserHistoryHelper.moveTo("/blog");
+            this.getPosts();
           } else {
             alert(res);
           }
@@ -80,6 +81,7 @@ export default class BlogViewModelImpl extends ViewModel
     try {
       await this.blogRepository.deletePost(idItem);
       BrowserHistoryHelper.moveTo("/blog");
+      this.getPosts();
     } catch (e) {
       alert(e);
     }

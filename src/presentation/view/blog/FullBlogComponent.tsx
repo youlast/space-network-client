@@ -3,6 +3,8 @@ import FullBlogViewModel from "../../view-model/blog/FullBlogViewModel";
 import BaseView from "../BaseView";
 import PostsResponse from "../../../data/models/blog/PostsResponse";
 import BlogViewModel from "../../view-model/blog/BlogViewModel";
+import { BrowserRouter } from "react-router-dom";
+import BrowserHistoryHelper from "../../../util/BrowserHistoryHelper";
 
 interface Props {
   fullBlogViewModel: FullBlogViewModel;

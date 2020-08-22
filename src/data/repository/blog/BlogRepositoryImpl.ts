@@ -4,6 +4,7 @@ import ApiHelper from "../../api/ApiHelper";
 import { APPLICATION_SERVER } from "../../../constants";
 import PostsResponse from "../../models/blog/PostsResponse";
 import AuthRepository from "../auth/AuthRepository";
+import BrowserHistoryHelper from "../../../util/BrowserHistoryHelper";
 
 export default class BlogRepositoryImpl implements BlogRepository {
   private readonly authRepository: AuthRepository;
@@ -62,7 +63,7 @@ export default class BlogRepositoryImpl implements BlogRepository {
     changedContent: string,
     changedImage: string,
     itemId: string | undefined
-  ): Promise<string> => {
+  ): any => {
     const requestOptions: RequestOptions = new RequestOptions();
     requestOptions.addHeader(
       "Authorization",

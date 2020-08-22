@@ -10,9 +10,9 @@ export default class FullBlogViewModelImpl extends ViewModel
   public allPosts: PostsResponse[];
   public postByIdData: PostsResponse[];
   public isShowFieldsForChanges: boolean;
-  public changedTitle: string;
+  public changedTitle: string | undefined;
   public changedImage: string | undefined;
-  public changedContent: string;
+  public changedContent: string | undefined;
 
   private itemId: string | undefined;
   private readonly blogRepository: BlogRepository;
@@ -35,18 +35,18 @@ export default class FullBlogViewModelImpl extends ViewModel
 
   public attachView = (baseView: BaseView): void => {
     super.attachView(baseView);
-
+    {
+      BrowserHistoryHelper.getHistory();
+    }
     this.itemId =
       new URLSearchParams(window.location.search).get("id") || undefined;
 
-    /*  if (!this.itemId) {
+    if (!this.itemId) {
       alert("Cannot detect item ID. Please reload page");
       return;
     } else {
       this.getAllPosts();
-    } */
-
-    this.getAllPosts();
+    }
   };
 
   public getAllPosts = async (): Promise<void> => {
@@ -76,11 +76,12 @@ export default class FullBlogViewModelImpl extends ViewModel
 
   public setIsShowFieldsForChanges = (value: boolean): void => {
     this.isShowFieldsForChanges = value;
+    this.clearUpdatedItems();
+    this.checkOnUpdates();
     super.notifyViewAboutChanges();
   };
 
   public onSubmitChangedPost = async (): Promise<void> => {
-    this.checkOnUpdates();
     try {
       await this.blogRepository.updatePost(
         this.changedTitle,
@@ -88,6 +89,8 @@ export default class FullBlogViewModelImpl extends ViewModel
         this.changedImage,
         this.itemId
       );
+      BrowserHistoryHelper.moveTo("/blog/?");
+      this.getAllPosts();
     } catch (e) {
       alert(e);
     }
@@ -105,6 +108,12 @@ export default class FullBlogViewModelImpl extends ViewModel
     this.allPosts = posts;
     this.getPostById(posts);
     super.notifyViewAboutChanges();
+  };
+
+  private clearUpdatedItems = (): void => {
+    this.changedTitle = undefined;
+    this.changedImage = undefined;
+    this.changedContent = undefined;
   };
 
   private checkOnUpdates = (): void => {

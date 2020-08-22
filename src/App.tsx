@@ -5,9 +5,8 @@ import AuthViewModelImpl from "./presentation/view-model/auth/AuthViewModelImpl"
 import AuthViewModel from "./presentation/view-model/auth/AuthViewModel";
 import SignUpComponent from "./presentation/view/auth/SignUpComponent";
 
-import { Router, Switch, Route, Link, BrowserRouter } from "react-router-dom";
+import { Switch, Route, Link, Router } from "react-router-dom";
 import AuthComponent from "./presentation/view/auth/AuthComponent";
-import BrowserHistoryHelper from "./util/BrowserHistoryHelper";
 import AuthListener from "./data/models/auth/AuthListener";
 import NavbarComponent from "./presentation/view/navbar/NavbarComponent";
 import BlogCreatePost from "./presentation/view/blog/BlogCreatePost";
@@ -19,6 +18,7 @@ import BlogViewModelImpl from "./presentation/view-model/blog/BlogViewModelImpl"
 import FullBlogComponent from "./presentation/view/blog/FullBlogComponent";
 import FullBlogViewModel from "./presentation/view-model/blog/FullBlogViewModel";
 import FullBlogViewModelImpl from "./presentation/view-model/blog/FullBlogViewModelImpl";
+import BrowserHistoryHelper from "./util/BrowserHistoryHelper";
 
 const App = () => {
   //repositories
@@ -55,49 +55,48 @@ const App = () => {
       }}
     >
       <Router history={BrowserHistoryHelper.getHistory()}>
-        <BrowserRouter>
-          <NavbarComponent authViewModel={authViewModel} />
-          <Switch>
-            {isAuthorized ? (
-              <>
-                <Route exact path="/">
-                  <Link to="/blog">
-                    <button className="btn btn-primary">Go to blog</button>
-                  </Link>
-                </Route>
+        <NavbarComponent authViewModel={authViewModel} />
 
-                <Route exact path="/blog">
-                  <BlogComponent blogViewModel={blogViewModel} />
-                </Route>
+        <Switch>
+          {isAuthorized ? (
+            <>
+              <Route exact path="/">
+                <Link to="/blog">
+                  <button className="btn btn-primary">Go to blog</button>
+                </Link>
+              </Route>
 
-                <Route exact path="/blog/create_post">
-                  <BlogCreatePost blogViewModel={blogViewModel} />
-                </Route>
+              <Route exact path="/blog">
+                <BlogComponent blogViewModel={blogViewModel} />
+              </Route>
 
-                <Route path="/blog/item">
-                  <FullBlogComponent
-                    blogViewModel={blogViewModel}
-                    fullBlogViewModel={fullBlogViewModel}
-                  />
-                </Route>
-              </>
-            ) : (
-              <>
-                <Route exact path="/">
-                  <AuthComponent authViewModel={authViewModel} />
-                </Route>
+              <Route exact path="/blog/create_post">
+                <BlogCreatePost blogViewModel={blogViewModel} />
+              </Route>
 
-                <Route exact path="/sign_in">
-                  <AuthComponent authViewModel={authViewModel} />
-                </Route>
+              <Route path="/blog/item">
+                <FullBlogComponent
+                  blogViewModel={blogViewModel}
+                  fullBlogViewModel={fullBlogViewModel}
+                />
+              </Route>
+            </>
+          ) : (
+            <>
+              <Route exact path="/">
+                <AuthComponent authViewModel={authViewModel} />
+              </Route>
 
-                <Route exact path="/sign_up">
-                  <SignUpComponent authViewModel={authViewModel} />
-                </Route>
-              </>
-            )}
-          </Switch>
-        </BrowserRouter>
+              <Route exact path="/sign_in">
+                <AuthComponent authViewModel={authViewModel} />
+              </Route>
+
+              <Route exact path="/sign_up">
+                <SignUpComponent authViewModel={authViewModel} />
+              </Route>
+            </>
+          )}
+        </Switch>
       </Router>
     </div>
   );
