@@ -46,11 +46,11 @@ const App = () => {
       className="container-fluid d-flex flex-column"
       style={{
         backgroundImage:
-          "url(https://images.unsplash.com/photo-1417577097439-425fb7dec05e?ixlib=rb-1.2.1&auto=format&fit=crop&w=1489&q=80)",
+          "url(https://images.unsplash.com/photo-1435224668334-0f82ec57b605?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjExMjU4fQ&auto=format&fit=crop&w=1350&q=80)",
         backgroundRepeat: "no-repeat",
         backgroundSize: "cover",
         paddingLeft: 0,
-        height: "150vh",
+        height: "100vh",
         paddingRight: 0,
       }}
     >

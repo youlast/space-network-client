@@ -53,7 +53,7 @@ export default class FullBlogComponent extends React.Component<Props, State>
   public render(): JSX.Element {
     const { postByIdData, isShowFieldsForChanges } = this.state;
     return (
-      <div className="p-4 ">
+      <div className="p-4">
         <div className="container ">
           {isShowFieldsForChanges && postByIdData
             ? postByIdData.map((post: PostsResponse) => {

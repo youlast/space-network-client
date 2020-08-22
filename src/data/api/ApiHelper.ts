@@ -65,8 +65,8 @@ export default class ApiHelper {
       optionsWrapper = new RequestOptions();
     }
     optionsWrapper
-      .addHeader("Access-Control-Allow-Credentials", "true")
       .setMethod("DELETE")
+      .addHeader("Access-Control-Allow-Credentials", "true")
       .addHeader("Content-Type", "application/json")
       .addHeader("Access-Control-Allow-Methods", "DELETE");
 

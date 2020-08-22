@@ -41,11 +41,10 @@ export default class FullBlogViewModelImpl extends ViewModel
     this.itemId =
       new URLSearchParams(window.location.search).get("id") || undefined;
 
-    if (!this.itemId) {
-      alert("Cannot detect item ID. Please reload page");
-      return;
-    } else {
-      this.getAllPosts();
+    this.getAllPosts();
+
+    if (window.location.pathname === "http://localhost:3000/blog/item?") {
+      BrowserHistoryHelper.moveTo("/blog");
     }
   };
 
@@ -92,7 +91,7 @@ export default class FullBlogViewModelImpl extends ViewModel
       BrowserHistoryHelper.moveTo("/blog/?");
       this.getAllPosts();
     } catch (e) {
-      alert(e);
+      BrowserHistoryHelper.moveTo("/blog/?");
     }
   };
 
