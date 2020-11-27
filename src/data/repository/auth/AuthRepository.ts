@@ -1,4 +1,5 @@
 import AuthListener from "../../models/auth/AuthListener";
+import SignInResponce from "./SignInResponce";
 
 export default interface AuthRepository {
   isAuthorized(): boolean;
@@ -9,13 +10,9 @@ export default interface AuthRepository {
 
   removeAuthListener(authListener: AuthListener): void;
 
-  /**
-   * @throws {Error} if credentials are not valid
-   * or another problem occured
-   */
-  signIn(password: string, email: string): unknown;
+  signIn(password: string, email: string): Promise<SignInResponce>;
 
-  signUp(username: string, password: string, email: string): unknown;
+  signUp(username: string, password: string, email: string): Promise<string>;
 
   signOut(): void;
 

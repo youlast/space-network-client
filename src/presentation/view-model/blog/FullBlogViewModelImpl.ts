@@ -5,14 +5,16 @@ import FullBlogViewModel from "./FullBlogViewModel";
 import PostsResponse from "../../../data/models/blog/PostsResponse";
 import BrowserHistoryHelper from "../../../util/BrowserHistoryHelper";
 
-export default class FullBlogViewModelImpl extends ViewModel
+export default class FullBlogViewModelImpl
+  extends ViewModel
   implements FullBlogViewModel {
   public allPosts: PostsResponse[];
-  public postByIdData: PostsResponse[];
+  public postByIdData?: PostsResponse;
   public isShowFieldsForChanges: boolean;
   public changedTitle: string | undefined;
   public changedImage: string | undefined;
   public changedContent: string | undefined;
+  public isShowDeleteModal: boolean;
 
   private itemId: string | undefined;
   private readonly blogRepository: BlogRepository;
@@ -23,39 +25,35 @@ export default class FullBlogViewModelImpl extends ViewModel
     this.blogRepository = blogRepository;
 
     this.allPosts = [];
-    this.postByIdData = [];
-
+    this.postByIdData = undefined;
     this.isShowFieldsForChanges = false;
-
-    //changed values
     this.changedTitle = "";
     this.changedImage = "";
     this.changedContent = "";
+    this.isShowDeleteModal = false;
   }
 
-  public attachView = (baseView: BaseView): void => {
+  public attachView = async (baseView: BaseView): Promise<void> => {
     super.attachView(baseView);
-    {
-      BrowserHistoryHelper.getHistory();
-    }
+
     this.itemId =
       new URLSearchParams(window.location.search).get("id") || undefined;
 
-    this.getAllPosts();
-
-    if (window.location.pathname === "http://localhost:3000/blog/item?") {
-      BrowserHistoryHelper.moveTo("/blog");
-    }
+    this.allPosts = await this.blogRepository.getAllPosts();
+    this.getPostById(this.allPosts);
+    super.notifyViewAboutChanges();
   };
 
-  public getAllPosts = async (): Promise<void> => {
-    try {
-      await this.blogRepository
-        .getAllPosts()
-        .then((res: PostsResponse[]) => this.setPostsData(res));
-    } catch (e) {
-      alert(e);
-    }
+  public detachView = (baseView: BaseView): void => {
+    super.detachView(baseView);
+
+    this.allPosts = [];
+    this.postByIdData = undefined;
+    this.isShowFieldsForChanges = false;
+    this.changedTitle = "";
+    this.changedImage = "";
+    this.changedContent = "";
+    this.isShowDeleteModal = false;
   };
 
   public setChangedTitle = (value: string): void => {
@@ -76,36 +74,31 @@ export default class FullBlogViewModelImpl extends ViewModel
   public setIsShowFieldsForChanges = (value: boolean): void => {
     this.isShowFieldsForChanges = value;
     this.clearUpdatedItems();
-    this.checkOnUpdates();
     super.notifyViewAboutChanges();
   };
 
-  public onSubmitChangedPost = async (): Promise<void> => {
+  public setIsShowDeleteModal = (isShowDeleteModal: boolean): void => {
+    this.isShowDeleteModal = isShowDeleteModal;
+    super.notifyViewAboutChanges();
+  };
+
+  public onSubmitChangedPost = async (
+    postByIdData: PostsResponse
+  ): Promise<void> => {
     try {
-      await this.blogRepository.updatePost(
-        this.changedTitle,
-        this.changedContent,
-        this.changedImage,
-        this.itemId
-      );
-      BrowserHistoryHelper.moveTo("/blog/?");
-      this.getAllPosts();
+      await this.blogRepository.updatePost(postByIdData);
+      this.setIsShowDeleteModal(false);
+      window.location.reload();
+      BrowserHistoryHelper.moveTo(`/blog/item?id=${postByIdData.id}`);
     } catch (e) {
-      BrowserHistoryHelper.moveTo("/blog/?");
+      alert(e);
     }
   };
 
   private getPostById = (posts: PostsResponse[]): void => {
     this.postByIdData = posts.filter(
       (post: PostsResponse) => post.id === Number(this.itemId)
-    );
-
-    super.notifyViewAboutChanges();
-  };
-
-  private setPostsData = (posts: PostsResponse[]): void => {
-    this.allPosts = posts;
-    this.getPostById(posts);
+    )[0];
     super.notifyViewAboutChanges();
   };
 
@@ -113,33 +106,5 @@ export default class FullBlogViewModelImpl extends ViewModel
     this.changedTitle = undefined;
     this.changedImage = undefined;
     this.changedContent = undefined;
-  };
-
-  private checkOnUpdates = (): void => {
-    if (this.allPosts.length >= 1) {
-      if (!this.changedTitle) {
-        this.postByIdData.map((post: PostsResponse) => {
-          this.changedTitle = post.title;
-
-          super.notifyViewAboutChanges();
-        });
-      }
-
-      if (!this.changedImage) {
-        this.postByIdData.map((post: PostsResponse) => {
-          this.changedImage = post.imagePost;
-
-          super.notifyViewAboutChanges();
-        });
-      }
-
-      if (!this.changedContent) {
-        this.postByIdData.map((post: PostsResponse) => {
-          this.changedContent = post.content;
-
-          super.notifyViewAboutChanges();
-        });
-      }
-    }
   };
 }

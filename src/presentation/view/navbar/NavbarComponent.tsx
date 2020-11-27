@@ -1,8 +1,5 @@
 import React from "react";
 
-import "./navbar-style.css";
-
-// @ts-ignore
 import { Link } from "react-router-dom";
 import AuthViewModel from "../../view-model/auth/AuthViewModel";
 
@@ -37,7 +34,7 @@ export default class NavbarComponent extends React.Component<Props, State> {
         <div className="d-flex">
           {this.authViewModel.isAuthorized() ? (
             <>
-              <div className="text-dark">
+              <div className="text-dark" style={{ cursor: "pointer" }}>
                 Hello {this.authViewModel.getUserName()}
               </div>
 

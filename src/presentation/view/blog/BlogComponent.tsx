@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import BlogViewModel from "../../view-model/blog/BlogViewModel";
 import PostsResponse from "../../../data/models/blog/PostsResponse";
+import PostComponent from "./PostComponent";
 
 interface Props {
   blogViewModel: BlogViewModel;
@@ -31,7 +32,7 @@ class BlogComponent extends React.Component<Props, State> {
   }
 
   public componentWillUnmount(): void {
-    this.blogViewModel.detachView();
+    this.blogViewModel.detachView(this);
   }
 
   public onViewModelChanged(): void {
@@ -53,51 +54,7 @@ class BlogComponent extends React.Component<Props, State> {
 
         <div>
           {allPosts.map((post: PostsResponse) => {
-            const transformationDate = new Date(post.datePost);
-
-            return (
-              <div className="post-preview pt-4">
-                <div className="col-4">
-                  <div className="d-flex justify-content-around post-meta">
-                    <div>Author post: {post.authorPost}</div>
-                    <div>
-                      {`${transformationDate.getDate()}.${
-                        transformationDate.getMonth() <= 10
-                          ? "0" + transformationDate.getMonth()
-                          : transformationDate.getMonth()
-                      }.${transformationDate.getFullYear()}`}{" "}
-                      at{" "}
-                      {`${transformationDate.getHours()}:${
-                        transformationDate.getMinutes() <= 9
-                          ? "0" + transformationDate.getMinutes()
-                          : transformationDate.getMinutes()
-                      }`}
-                    </div>
-                  </div>
-                </div>
-
-                <div>
-                  <h2 className="post-title">
-                    <Link to={`/blog/item?id=${post.id}`}>{post.title}</Link>
-                  </h2>
-                </div>
-                <div className="post-body">
-                  {post.content && post.content.length >= 400
-                    ? post.content.slice(0, 400)
-                    : post.content}
-                  <div className="pl-2" style={{ display: "initial" }}>
-                    <Link to={`/blog/item?id=${post.id}`}>Read More</Link>
-                  </div>
-                </div>
-                <div
-                  style={{
-                    height: "2px",
-                    width: "100%",
-                    background: "white",
-                  }}
-                />
-              </div>
-            );
+            return <PostComponent post={post} key={`post_id_${post.id}`} />;
           })}
         </div>
       </div>

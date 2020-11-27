@@ -33,7 +33,7 @@ export default class BlogRepositoryImpl implements BlogRepository {
       })
     );
 
-    return ApiHelper.fetchPostJson(
+    return ApiHelper.fetchPostRaw(
       `${APPLICATION_SERVER}/api/blog/create_post`,
       requestOptions
     );
@@ -52,18 +52,13 @@ export default class BlogRepositoryImpl implements BlogRepository {
 
     requestOptions.setBody(JSON.stringify({ idPost }));
 
-    return ApiHelper.fetchDeleteJson(
+    return ApiHelper.fetchDeleteRaw(
       `${APPLICATION_SERVER}/api/blog/delete_post`,
       requestOptions
     );
   };
 
-  public updatePost = (
-    changedTitle: string,
-    changedContent: string,
-    changedImage: string,
-    itemId: string | undefined
-  ): any => {
+  public updatePost = (postByIdData: PostsResponse): Promise<string> => {
     const requestOptions: RequestOptions = new RequestOptions();
     requestOptions.addHeader(
       "Authorization",
@@ -72,14 +67,11 @@ export default class BlogRepositoryImpl implements BlogRepository {
 
     requestOptions.setBody(
       JSON.stringify({
-        title: changedTitle,
-        content: changedContent,
-        imagePost: changedImage,
-        idPost: itemId,
+        ...postByIdData,
       })
     );
 
-    return ApiHelper.fetchPutJson(
+    return ApiHelper.fetchPutRaw(
       `${APPLICATION_SERVER}/api/blog/update_post`,
       requestOptions
     );

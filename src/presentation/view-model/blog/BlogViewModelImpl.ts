@@ -5,7 +5,8 @@ import BlogRepository from "../../../data/repository/blog/BlogRepository";
 import BrowserHistoryHelper from "../../../util/BrowserHistoryHelper";
 import PostsResponse from "../../../data/models/blog/PostsResponse";
 
-export default class BlogViewModelImpl extends ViewModel
+export default class BlogViewModelImpl
+  extends ViewModel
   implements BlogViewModel {
   public titlePost: string;
   public textPost: string;
@@ -58,16 +59,13 @@ export default class BlogViewModelImpl extends ViewModel
 
   public onCreateNewPost = async (): Promise<void> => {
     try {
-      await this.blogRepository
-        .createNewPost(this.titlePost, this.textPost, this.imageUrl)
-        .then((res: string) => {
-          if (res === "OK") {
-            BrowserHistoryHelper.moveTo("/blog");
-            this.getPosts();
-          } else {
-            alert(res);
-          }
-        });
+      await this.blogRepository.createNewPost(
+        this.titlePost,
+        this.textPost,
+        this.imageUrl
+      );
+      BrowserHistoryHelper.moveTo("/");
+      this.getPosts();
     } catch (e) {
       alert(e);
     }
@@ -80,7 +78,7 @@ export default class BlogViewModelImpl extends ViewModel
     super.notifyViewAboutChanges();
     try {
       await this.blogRepository.deletePost(idItem);
-      BrowserHistoryHelper.moveTo("/blog");
+      BrowserHistoryHelper.moveTo("/");
       this.getPosts();
     } catch (e) {
       alert(e);

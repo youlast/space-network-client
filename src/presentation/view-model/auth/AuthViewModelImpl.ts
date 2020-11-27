@@ -6,7 +6,8 @@ import ViewModel from "../ViewModel";
 import AuthListener from "../../../data/models/auth/AuthListener";
 import FormValidator from "../../../util/FormValidator";
 
-export default class AuthViewModelImpl extends ViewModel
+export default class AuthViewModelImpl
+  extends ViewModel
   implements AuthViewModel, AuthListener {
   public userNameQuery: string;
   public passwordQuery: string;
@@ -15,6 +16,7 @@ export default class AuthViewModelImpl extends ViewModel
   public errorMessage: string;
   public emailQuery: string;
   public confirmPasswordQuery: string;
+  public isLoading: boolean;
 
   public authRepository: AuthRepository;
 
@@ -24,6 +26,7 @@ export default class AuthViewModelImpl extends ViewModel
     this.passwordQuery = "";
 
     this.isShowError = false;
+    this.isLoading = false;
     this.errorMessage = "";
     this.emailQuery = "";
     this.confirmPasswordQuery = "";
@@ -37,8 +40,15 @@ export default class AuthViewModelImpl extends ViewModel
     this.moveHomeIfAuthorized();
   };
 
-  public detachView = (): void => {
-    super.detachView();
+  public detachView = (baseView: BaseView): void => {
+    super.detachView(baseView);
+    this.userNameQuery = "";
+    this.passwordQuery = "";
+    this.isShowError = false;
+    this.isLoading = false;
+    this.errorMessage = "";
+    this.emailQuery = "";
+    this.confirmPasswordQuery = "";
     this.authRepository.removeAuthListener(this);
   };
 
@@ -67,18 +77,18 @@ export default class AuthViewModelImpl extends ViewModel
   };
 
   public onSignIn = async (): Promise<void> => {
+    this.setIsLoading(true);
     if (this.isValidSignInForm()) {
       try {
         await this.authRepository.signIn(this.passwordQuery, this.emailQuery);
       } catch (e) {
         this.errorMessage = e.message;
         this.isShowError = true;
+        super.notifyViewAboutChanges();
       }
-
-      super.notifyViewAboutChanges();
     }
 
-    this.notifyViewAboutChanges();
+    this.setIsLoading(false);
   };
 
   public isAuthorized = (): boolean => {
@@ -90,28 +100,29 @@ export default class AuthViewModelImpl extends ViewModel
   };
 
   public onSignUp = async (): Promise<void> => {
+    this.setIsLoading(true);
     if (this.validateLoginForm()) {
       try {
-        //@ts-ignore
-        await this.authRepository
-          .signUp(this.userNameQuery, this.emailQuery, this.passwordQuery)
-          .then((res: string) => {
-            if (res === "OK") {
-              BrowserHistoryHelper.moveTo("/sign_in");
-            }
-          });
+        await this.authRepository.signUp(
+          this.userNameQuery,
+          this.emailQuery,
+          this.passwordQuery
+        );
+        BrowserHistoryHelper.moveTo("/sign_in");
       } catch (e) {
-        console.log(e);
+        alert(e);
       }
-
-      super.notifyViewAboutChanges();
     }
-
-    this.notifyViewAboutChanges();
+    this.setIsLoading(false);
   };
 
   public onSignOut = (): void => {
     this.authRepository.signOut();
+  };
+
+  private setIsLoading = (isLoading: boolean): void => {
+    this.isLoading = isLoading;
+    super.notifyViewAboutChanges();
   };
 
   private isValidSignInForm = (): boolean => {

@@ -1,6 +1,5 @@
 import React from "react";
 
-import "./blog-style.css";
 import BlogViewModel from "../../view-model/blog/BlogViewModel";
 
 interface Props {
@@ -22,7 +21,7 @@ export default class BlogCreatePost extends React.Component<Props> {
   }
 
   public componentWillUnmount(): void {
-    this.blogViewModel.detachView();
+    this.blogViewModel.detachView(this);
   }
 
   public onViewModelChanged(): void {
@@ -31,7 +30,7 @@ export default class BlogCreatePost extends React.Component<Props> {
 
   public render() {
     return (
-      <div className="container" style={{ marginTop: "200px" }}>
+      <div className="container" style={{ marginTop: "100px" }}>
         <div className="row row-style">
           <h1>Create a new blog post</h1>
         </div>

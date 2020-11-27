@@ -6,6 +6,7 @@ export default interface AuthViewModel extends BaseViewModel {
   passwordQuery: string;
   isShowError: boolean;
   errorMessage: string;
+  isLoading: boolean;
   authRepository: AuthRepository;
 
   onUserNameQueryChanged(loginQuery: string): void;

@@ -1,13 +1,10 @@
 import React from "react";
 
-import {
-  Link,
-  // @ts-ignore
-} from "react-router-dom";
+import { Link } from "react-router-dom";
 
-import "./auth-style.css";
 import BaseView from "../BaseView";
 import AuthViewModel from "../../view-model/auth/AuthViewModel";
+import LoadingComponent from "../../../util/components/LoadingComponent";
 
 interface Props {
   authViewModel: AuthViewModel;
@@ -16,9 +13,11 @@ interface Props {
 export interface State {
   isShowError: boolean;
   errorMessage: string;
+  isLoading: boolean;
 }
 
-export default class SignUpComponent extends React.Component<Props, State>
+export default class SignUpComponent
+  extends React.Component<Props, State>
   implements BaseView {
   private authViewModel: AuthViewModel;
 
@@ -30,6 +29,7 @@ export default class SignUpComponent extends React.Component<Props, State>
     this.state = {
       isShowError: authViewModel.isShowError,
       errorMessage: authViewModel.errorMessage,
+      isLoading: authViewModel.isLoading,
     };
   }
 
@@ -38,18 +38,19 @@ export default class SignUpComponent extends React.Component<Props, State>
   }
 
   public componentWillUnmount(): void {
-    this.authViewModel.detachView();
+    this.authViewModel.detachView(this);
   }
 
   public onViewModelChanged(): void {
     this.setState({
       isShowError: this.authViewModel.isShowError,
       errorMessage: this.authViewModel.errorMessage,
+      isLoading: this.authViewModel.isLoading,
     });
   }
 
   public render(): JSX.Element {
-    const { isShowError, errorMessage } = this.state;
+    const { isShowError, errorMessage, isLoading } = this.state;
 
     return (
       <div className="row flex-grow-1 d-flex justify-content-center align-items-center ml-0 mr-0">
@@ -119,7 +120,11 @@ export default class SignUpComponent extends React.Component<Props, State>
               onClick={(): Promise<void> => this.authViewModel.onSignUp()}
               type="button"
             >
-              Join to space-network
+              {isLoading ? (
+                <LoadingComponent size="xs" color="light" />
+              ) : (
+                "Join to space-network"
+              )}
             </button>
           </div>
 

@@ -1,8 +1,9 @@
 import BaseViewModel from "../BaseViewModel";
-import PostsResponse from "../../../data/models/blog/PostsResponse";
+import PostResponse from "../../../data/models/blog/PostsResponse";
 
 export default interface FullBlogViewModel extends BaseViewModel {
-  postByIdData: PostsResponse[];
+  postByIdData?: PostResponse;
+  isShowDeleteModal: boolean;
   isShowFieldsForChanges: boolean;
 
   setIsShowFieldsForChanges(value: boolean): void;
@@ -13,5 +14,7 @@ export default interface FullBlogViewModel extends BaseViewModel {
 
   setChangedContent(value: string): void;
 
-  onSubmitChangedPost(): Promise<void>;
+  onSubmitChangedPost(postByIdData: PostResponse): Promise<void>;
+
+  setIsShowDeleteModal(isShowDeleteModal: boolean): void;
 }

@@ -1,0 +1,108 @@
+/* ==================== GLOBAL STYLES ================================ */
+body {
+  color: #000000;
+  font-style: normal;
+  padding-right: 0 !important;
+}
+
+#landing-root {
+  padding-right: 0 !important;
+}
+
+a:hover {
+  text-decoration: none;
+}
+
+.btn:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+*,
+*:focus,
+*:hover,
+input,
+select,
+textarea {
+  outline: none;
+}
+
+textarea,
+select {
+  border: none;
+}
+
+button {
+  text-decoration: none;
+  background: transparent;
+  border: 0;
+}
+
+button,
+button :active,
+button :focus {
+  outline: none;
+}
+
+/* ==================== END OF GLOBAL STYLES ================================ */
+
+/* ====================BlOG STYLES ================================ */
+.row-style {
+  justify-content: center;
+  padding-top: 40px;
+}
+
+.row-style input textarea {
+  width: 250px;
+}
+
+body {
+  color: white;
+}
+
+textarea {
+  font-size: 20px;
+  width: 600px;
+  height: 200px;
+}
+
+input {
+  font-size: 20px;
+  width: 600px;
+  height: 50px;
+  padding: 10px;
+}
+
+/* ==================== BlOG STYLES ================================ */
+
+/* ==================== POST STYLES ================================ */
+
+.post-title a {
+  font-size: 28px;
+  color: white;
+  text-decoration: none;
+}
+
+.post-title a:hover {
+  color: wheat;
+}
+
+.post-meta {
+  font-size: 13px;
+}
+
+.post-body {
+  font-size: 16px;
+}
+
+/* ==================== POST STYLES ================================ */
+
+/* ==================== AUTH STYLES ================================ */
+.auth-container {
+  max-width: 500px;
+}
+/* ==================== AUTH STYLES ================================ */
+
+/* ==================== NAVBAR STYLES ================================ */
+
+/* ==================== NAVBAR STYLES ================================ */

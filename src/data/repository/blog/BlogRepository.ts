@@ -11,10 +11,5 @@ export default interface BlogRepository {
 
   deletePost(idItem: number): Promise<string>;
 
-  updatePost(
-    title: string | undefined,
-    content: string | undefined,
-    imageUrl: string | undefined,
-    itemId: string | undefined
-  ): Promise<string>;
+  updatePost(postByIdData: PostsResponse): Promise<string>;
 }

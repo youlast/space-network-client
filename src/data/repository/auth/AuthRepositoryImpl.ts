@@ -4,6 +4,7 @@ import AuthRepository from "./AuthRepository";
 import ApiHelper from "../../api/ApiHelper";
 import { APPLICATION_SERVER } from "../../../constants";
 import BrowserHistoryHelper from "../../../util/BrowserHistoryHelper";
+import SignInResponce from "./SignInResponce";
 
 export default class AuthRepositoryImpl implements AuthRepository {
   private authListeners: AuthListener[];
@@ -30,7 +31,10 @@ export default class AuthRepositoryImpl implements AuthRepository {
     return !!localStorage.getItem(this.ACCESS_TOKEN_KEY);
   }
 
-  public signIn = (password: string, email: string): Promise<unknown> => {
+  public signIn = (
+    password: string,
+    email: string
+  ): Promise<SignInResponce> => {
     const requestOptions: RequestOptions = new RequestOptions();
 
     requestOptions.setBody(
@@ -40,26 +44,19 @@ export default class AuthRepositoryImpl implements AuthRepository {
       })
     );
 
-    return ApiHelper.fetchPostJson(
+    return ApiHelper.fetchPostJson<SignInResponce>(
       `${APPLICATION_SERVER}/api/auth/signin`,
       requestOptions
-    ).then((res: string) => {
-      if (res.includes("{")) {
-        const json = JSON.parse(res);
-        if (json.error) {
-          alert(json.error);
-        }
+    ).then((res: SignInResponce) => {
+      if (res.token) {
+        this.saveAccessTokenFromResponse(res.token);
+        BrowserHistoryHelper.moveTo("/");
+        this.notifyAuthListenersAboutChanges();
+      }
 
-        if (json.token) {
-          this.saveAccessTokenFromResponse(json.token);
-          BrowserHistoryHelper.moveTo("/");
-          this.notifyAuthListenersAboutChanges();
-        }
-
-        if (json.username) {
-          this.saveUserNameFromResponse(json.username);
-          this.notifyAuthListenersAboutChanges();
-        }
+      if (res.username) {
+        this.saveUserNameFromResponse(res.username);
+        this.notifyAuthListenersAboutChanges();
       }
 
       return res;
@@ -70,7 +67,7 @@ export default class AuthRepositoryImpl implements AuthRepository {
     username: string,
     email: string,
     password: string
-  ): unknown => {
+  ): Promise<string> => {
     const requestOptions: RequestOptions = new RequestOptions();
 
     requestOptions.setBody(
@@ -81,10 +78,10 @@ export default class AuthRepositoryImpl implements AuthRepository {
       })
     );
 
-    return ApiHelper.fetchPostJson(
+    return ApiHelper.fetchPostRaw(
       `${APPLICATION_SERVER}/api/auth/signup`,
       requestOptions
-    ).then((res: any) => res.text());
+    );
   };
 
   public signOut(): void {

@@ -8,8 +8,8 @@ export default class ViewModel implements BaseViewModel {
     this.baseView = baseView;
   }
 
-  public detachView(): void {
-    this.baseView = undefined;
+  public detachView(baseView: BaseView): void {
+    this.baseView = baseView;
   }
 
   protected notifyViewAboutChanges(): void {
